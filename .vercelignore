@@ -1,0 +1,12 @@
+# Vercel installs deps and builds in the cloud — only upload sources.
+node_modules
+**/node_modules
+.git
+.nx
+dist
+**/dist
+test-output
+**/test-output
+docs/design/handoff
+.claude
+*.timestamp*

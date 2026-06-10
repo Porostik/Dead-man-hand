@@ -14,6 +14,9 @@ import {
   mockTelegramEnv,
   mountMiniApp,
   bindMiniAppCssVars,
+  setMiniAppHeaderColor,
+  setMiniAppBackgroundColor,
+  setMiniAppBottomBarColor,
   mountThemeParams,
   bindThemeParamsCssVars,
   mountViewport,
@@ -77,6 +80,19 @@ export function initTelegram(): void {
     if (mountMiniApp.isAvailable()) {
       mountMiniApp();
       if (bindMiniAppCssVars.isAvailable()) bindMiniAppCssVars();
+    }
+    // Match the Telegram chrome to the game's dark palette so the header/bar
+    // blend with the app (RGB header where supported, else the theme bg key).
+    if (setMiniAppHeaderColor.isAvailable()) {
+      setMiniAppHeaderColor(
+        setMiniAppHeaderColor.supports?.rgb?.() ? '#160f0a' : 'bg_color',
+      );
+    }
+    if (setMiniAppBackgroundColor.isAvailable()) {
+      setMiniAppBackgroundColor('#0a0705');
+    }
+    if (setMiniAppBottomBarColor.isAvailable()) {
+      setMiniAppBottomBarColor('#0a0705');
     }
   });
   safe(() => {

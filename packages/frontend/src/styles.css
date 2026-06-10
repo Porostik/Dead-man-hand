@@ -11,7 +11,8 @@ body {
   justify-content: center;
 }
 
-/* Live app frame: fill the viewport (TMA / mobile) instead of the 390×844 mockup. */
+/* Live app frame: fill the viewport (TMA / mobile) instead of the 390×844 mockup,
+   with no rounding of our own (TG provides the window corners). */
 .dm-app--live {
   width: min(440px, 100vw);
   height: 100dvh;
@@ -20,6 +21,14 @@ body {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+}
+/* The felt board fills edge-to-edge — no inset margins, no rounded corners. */
+.dm-app--live .dm-felt {
+  margin: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    inset 0 30px 60px rgba(0, 0, 0, 0.5);
 }
 
 /* ------------------------------------------------ game tweaks (over the skin) */
@@ -107,11 +116,11 @@ body {
   }
 }
 
-/* While shuffling, the deck glides down to the centre of the board (smoothly,
-   via the base transform transition) and glides back up to the top when play
-   starts. */
+/* While shuffling, the deck sits in the CENTRE of the board (viewport-independent
+   — it never drops to the bottom). */
 .dm-felt > .dm-deck2.is-shuffle {
-  transform: translateX(-50%) translateY(150px);
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Deck cards layer back-to-front so the death card can slot BETWEEN them. */
