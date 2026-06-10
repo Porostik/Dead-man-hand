@@ -2175,8 +2175,13 @@ body {
    no effect in a normal browser / non-fullscreen. */
 .dm-app--live {
   padding-top: calc(
-    var(--tg-viewport-safe-area-inset-top, 0px) +
-      var(--tg-viewport-content-safe-area-inset-top, 0px)
+    max(
+        var(--tg-viewport-safe-area-inset-top, 0px),
+        env(safe-area-inset-top, 0px)
+      ) + var(--tg-viewport-content-safe-area-inset-top, 0px)
   );
-  padding-bottom: var(--tg-viewport-safe-area-inset-bottom, 0px);
+  padding-bottom: max(
+    var(--tg-viewport-safe-area-inset-bottom, 0px),
+    env(safe-area-inset-bottom, 0px)
+  );
 }
