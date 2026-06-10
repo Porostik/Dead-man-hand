@@ -1,0 +1,7 @@
+/* High Noon DS — webfonts
+   Rye        : display / logo / card numerals (western slab-display)
+   Zilla Slab : UI text & body (readable slab serif)
+   Space Mono : numeric data — TON balances, ELO, timers, labels
+   NOTE: loaded from Google Fonts. If self-hosting later, swap these @imports
+   for @font-face rules pointing at local .woff2 files. */
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Zilla+Slab:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');

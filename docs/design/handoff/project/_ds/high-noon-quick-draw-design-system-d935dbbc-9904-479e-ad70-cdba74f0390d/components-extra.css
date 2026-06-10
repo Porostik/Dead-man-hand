@@ -1,0 +1,400 @@
+/* ============================================================
+   High Noon DS — Extended component styles
+   Paraphernalia (coin, pot, ammo) + more UI (progress, banner,
+   spinner, tooltip, pills). All values reference tokens. Prefix: hn-
+   ============================================================ */
+
+/* ---------------------------------------------------------- ICON */
+.hn-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+
+/* ---------------------------------------------------------- COIN (TON token) */
+.hn-coin {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clay-800);
+  background: radial-gradient(
+    circle at 34% 26%,
+    #f6dfa4,
+    var(--gold-500) 56%,
+    var(--gold-600)
+  );
+  border: 2px solid var(--gold-600);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 -3px 7px rgba(120, 80, 20, 0.5),
+    inset 0 2px 5px rgba(255, 246, 205, 0.55);
+}
+.hn-coin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    rgba(0, 0, 0, 0.32) 0 3deg,
+    transparent 3deg 7.5deg
+  );
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 0 79%,
+    #000 81% 95%,
+    transparent 99%
+  );
+  mask: radial-gradient(
+    circle,
+    transparent 0 79%,
+    #000 81% 95%,
+    transparent 99%
+  );
+}
+.hn-coin::after {
+  content: '';
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.22);
+  box-shadow: inset 0 0 7px rgba(255, 244, 200, 0.5);
+}
+.hn-coin__mark {
+  position: relative;
+  z-index: 1;
+  width: 44%;
+  height: 44%;
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 0 rgba(255, 246, 205, 0.55));
+}
+.hn-coin--silver {
+  background: radial-gradient(circle at 34% 26%, #f1ede2, #b7af9e 56%, #8c8473);
+  border-color: #7d7565;
+  color: #2c2a25;
+}
+.hn-coin--rust {
+  background: radial-gradient(
+    circle at 34% 26%,
+    var(--rust-300),
+    var(--rust-500) 56%,
+    var(--rust-600)
+  );
+  border-color: var(--rust-600);
+  color: var(--sand-50);
+}
+.hn-coin--sm {
+  width: 30px;
+  height: 30px;
+  border-width: 1.5px;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+.hn-coin--lg {
+  width: 66px;
+  height: 66px;
+}
+.hn-coin__count {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--clay-900);
+  color: var(--gold-400);
+  border: 1.5px solid var(--gold-600);
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------- POT (stacked pile + tag) */
+.hn-pot {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.hn-pot__stack {
+  position: relative;
+}
+.hn-pot__stack .hn-coin,
+.hn-pot__stack .hn-chip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 4px rgba(15, 7, 4, 0.55);
+}
+.hn-pot__glow {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 54px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(216, 189, 134, 0.4),
+    transparent 70%
+  );
+  filter: blur(3px);
+}
+
+/* ---------------------------------------------------------- AMMO METER (rounds / Bo3) */
+.hn-ammo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.hn-ammo__slot {
+  color: var(--gold-500);
+  transition:
+    color var(--dur-fast),
+    transform var(--dur-fast);
+}
+.hn-ammo__slot--spent {
+  color: var(--text-faint);
+  opacity: 0.5;
+}
+.hn-ammo__slot--live {
+  color: var(--rust-400);
+  filter: drop-shadow(0 0 6px rgba(223, 106, 62, 0.6));
+}
+
+/* revolver-cylinder ammo (6 chambers) */
+.hn-cylinder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  position: relative;
+  flex: 0 0 auto;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--clay-700) 0 36%,
+    var(--clay-600) 37%
+  );
+  border: 2px solid var(--gold-600);
+  box-shadow: var(--shadow-card), var(--inset-well);
+}
+.hn-cylinder__hole {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--clay-900);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.hn-cylinder__hole--live {
+  background: radial-gradient(
+    circle at 40% 35%,
+    var(--gold-400),
+    var(--gold-600)
+  );
+}
+
+/* ---------------------------------------------------------- PROGRESS BAR */
+.hn-progress {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  border: var(--border-1) solid var(--border-hairline);
+  overflow: hidden;
+}
+.hn-progress__fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--gold-600), var(--gold-400));
+  transition: width var(--dur) var(--ease-out);
+}
+.hn-progress--rust .hn-progress__fill {
+  background: linear-gradient(90deg, var(--rust-500), var(--rust-300));
+}
+.hn-progress--turq .hn-progress__fill {
+  background: linear-gradient(90deg, var(--turq-600), var(--turq-400));
+}
+.hn-progress--lg {
+  height: 14px;
+}
+
+/* ---------------------------------------------------------- BANNER / CALLOUT */
+.hn-banner {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(216, 189, 134, 0.07);
+  border: var(--border-1) solid var(--border-hairline);
+  color: var(--text-body);
+}
+.hn-banner__icon {
+  color: var(--gold-400);
+  margin-top: 1px;
+}
+.hn-banner__title {
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+  font-size: var(--text-sm);
+  margin-bottom: 2px;
+}
+.hn-banner__msg {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: var(--lh-text);
+}
+.hn-banner--warning {
+  background: rgba(217, 154, 43, 0.12);
+  border-color: rgba(217, 154, 43, 0.4);
+}
+.hn-banner--warning .hn-banner__icon {
+  color: var(--warning-500);
+}
+.hn-banner--danger {
+  background: rgba(178, 58, 42, 0.14);
+  border-color: rgba(178, 58, 42, 0.45);
+}
+.hn-banner--danger .hn-banner__icon {
+  color: var(--rust-300);
+}
+.hn-banner--positive {
+  background: rgba(58, 155, 143, 0.12);
+  border-color: rgba(58, 155, 143, 0.4);
+}
+.hn-banner--positive .hn-banner__icon {
+  color: var(--turq-400);
+}
+
+/* ---------------------------------------------------------- SPINNER (loader) */
+.hn-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  border: 3px solid var(--border-hairline);
+  border-top-color: var(--gold-400);
+  animation: hn-spin 0.8s linear infinite;
+}
+.hn-spinner--sm {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+.hn-spinner--rust {
+  border-top-color: var(--rust-400);
+}
+@keyframes hn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------- TOOLTIP */
+.hn-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+.hn-tooltip__bubble {
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--clay-900);
+  color: var(--sand-100);
+  border: var(--border-1) solid var(--border-soft);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  z-index: 60;
+}
+.hn-tooltip__bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--clay-900);
+}
+
+/* ---------------------------------------------------------- STAT (label + value block) */
+.hn-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hn-stat__val {
+  font-family: var(--font-mono);
+  font-size: var(--mono-lg);
+  color: var(--gold-400);
+}
+.hn-stat__lab {
+  font-family: var(--font-mono);
+  font-size: var(--mono-sm);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---------------------------------------------------------- WORDMARK */
+.hn-wordmark {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-5) var(--space-6);
+}
+.hn-wordmark__sun {
+  position: absolute;
+  bottom: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(255, 210, 122, 0.55),
+    rgba(223, 106, 62, 0.12) 62%,
+    transparent 70%
+  );
+  filter: blur(3px);
+}
+.hn-wordmark__kicker {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 5px;
+  color: var(--gold-400);
+}
+.hn-wordmark__name {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--display-lg);
+  color: var(--sand-50);
+  line-height: 0.95;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+.hn-wordmark__tag {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-500);
+  margin-top: var(--space-2);
+  opacity: 0.85;
+}
+.hn-wordmark--sm .hn-wordmark__name {
+  font-size: var(--display-md);
+}

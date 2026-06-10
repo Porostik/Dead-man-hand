@@ -1,0 +1,87 @@
+/* High Noon DS — Color tokens
+   The product lives on a dark, warm leather stage with sun-bleached parchment UI.
+   Base ramps first, then semantic aliases. Reference SEMANTIC tokens in components. */
+
+:root {
+  /* ---------- base ramps ---------- */
+  /* Clay / leather — backgrounds, from near-black to worn wood */
+  --clay-900: #1b0d08;
+  --clay-800: #27130e;
+  --clay-700: #341a13;
+  --clay-600: #4a261d;
+  --clay-500: #5e3225;
+  --clay-400: #7a4636;
+  --clay-300: #9a6450;
+
+  /* Sand / parchment — text on dark, card faces, light surfaces */
+  --sand-50: #fbf3e0;
+  --sand-100: #f3e7ca;
+  --sand-200: #e6cfa6;
+  --sand-300: #cdb389;
+  --sand-400: #a98f6a;
+
+  /* Rust — primary action, heat, danger of the duel */
+  --rust-600: #9f3d1d;
+  --rust-500: #c8512b;
+  --rust-400: #df6a3e;
+  --rust-300: #eb8a63;
+
+  /* Gold — trim, borders, win highlight, premium */
+  --gold-600: #a9852f;
+  --gold-500: #c8a36a;
+  --gold-400: #d9bd86;
+
+  /* Turquoise — secondary, cash-out / positive, southwestern pop */
+  --turq-600: #256b61;
+  --turq-500: #2f7d72;
+  --turq-400: #3a9b8f;
+
+  /* Status extras */
+  --danger-500: #b23a2a;
+  --warning-500: #d99a2b;
+
+  /* Playing-card suits — on parchment */
+  --suit-red: #c14b24;
+  --suit-ink: #2a1409;
+
+  /* ---------- semantic: surfaces ---------- */
+  --bg-stage: var(--clay-900); /* behind the phone / app root */
+  --bg-base: var(--clay-800); /* app background */
+  --bg-elevated: var(--clay-700); /* sheets, headers */
+  --bg-felt: var(--clay-600); /* the play table */
+  --surface-1: #341a13; /* cards / panels on dark */
+  --surface-2: #40221a; /* raised card / hover */
+  --surface-sunken: #20100b; /* wells, inputs */
+  --parchment: var(--sand-100); /* playing-card face, light chips */
+  --overlay-scrim: rgba(15, 7, 4, 0.66); /* modal / drawer backdrop */
+
+  /* ---------- semantic: text ---------- */
+  --text-strong: var(--sand-50);
+  --text-body: var(--sand-100);
+  --text-muted: var(--sand-300);
+  --text-faint: rgba(243, 231, 202, 0.45);
+  --text-on-rust: var(--sand-50);
+  --text-on-parch: var(--clay-700);
+  --text-ink: var(--clay-700); /* dark text on parchment/light */
+
+  /* ---------- semantic: lines & borders ---------- */
+  --border-hairline: rgba(200, 163, 106, 0.26);
+  --border-soft: rgba(200, 163, 106, 0.4);
+  --border-strong: var(--gold-500);
+
+  /* ---------- semantic: interactive ---------- */
+  --accent: var(--rust-500);
+  --accent-hover: var(--rust-400);
+  --accent-press: var(--rust-600);
+  --on-accent: var(--sand-50);
+
+  --secondary: var(--turq-500);
+  --secondary-hover: var(--turq-400);
+
+  --positive: var(--turq-400);
+  --danger: var(--danger-500);
+  --warning: var(--warning-500);
+  --win: var(--gold-400);
+
+  --focus-ring: var(--gold-400);
+}

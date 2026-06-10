@@ -1,0 +1,592 @@
+/* ====================================================================
+   Dead Men — first-launch sign-up + rules onboarding + brand AceFan crest.
+   Inherits the saloon theme vars from .dm-app (ember / gold / teal / mono).
+   ==================================================================== */
+
+/* ---------------- the fanned hand: A A · ✦ · A A ---------------- */
+.dm-fan {
+  position: relative;
+  width: 196px;
+  height: 116px;
+  flex: 0 0 auto;
+}
+.dm-fan__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 250px;
+  height: 168px;
+  transform: translate(-50%, -44%);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 122, 60, 0.28),
+    rgba(255, 176, 102, 0.08) 46%,
+    transparent 68%
+  );
+}
+.dm-fan__slot {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  margin-left: -27px;
+  transform-origin: bottom center;
+}
+.dm-fan__slot .hn-pcard {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.55);
+  border-color: rgba(40, 26, 14, 0.55);
+}
+.dm-fan__slot.is-hole .hn-pcard {
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.6),
+    0 0 18px rgba(217, 189, 134, 0.35);
+}
+.dm-fan--hero {
+  animation: dm-fan-in 0.7s cubic-bezier(0.16, 0.84, 0.34, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dm-fan--hero {
+    animation: none;
+  }
+}
+@keyframes dm-fan-in {
+  0% {
+    transform: translateY(14px) scale(0.94);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* compact crest for the lobby top */
+.dm-crest {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 78px;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+.dm-crest .dm-fan {
+  transform: scale(0.56);
+  transform-origin: bottom center;
+  margin-bottom: -8px;
+}
+.dm-crest .dm-fan__slot .hn-pcard {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------------- onboarding shell ---------------- */
+.dm-onb {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-text);
+  color: var(--ink);
+}
+.dm-onb__link {
+  color: var(--ember2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* sun glow from below, like the felt */
+.dm-onb::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -22%;
+  width: 150%;
+  height: 70%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 100%,
+    rgba(255, 122, 60, 0.18),
+    rgba(217, 189, 134, 0.05) 38%,
+    transparent 64%
+  );
+}
+
+/* ============ sign-up ============ */
+.dm-onb--signup {
+  justify-content: flex-start;
+}
+.dm-onb__crest {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding: 38px 0 16px;
+  position: relative;
+  z-index: 1;
+}
+.dm-onb__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.dm-onb__brand-k {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.dm-onb__brand-n {
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+  text-shadow: 0 0 26px rgba(255, 176, 102, 0.25);
+}
+
+.dm-onb__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 26px 24px;
+  position: relative;
+  z-index: 1;
+  min-height: 0;
+}
+.dm-onb__h {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+.dm-onb__sub {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.dm-onb__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 26px;
+}
+.dm-onb__checks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dm-onb__foot {
+  margin-top: auto;
+  padding-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dm-onb__fine {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  color: var(--faint);
+  line-height: 1.5;
+}
+
+/* form field overrides to match the dark saloon */
+.dm-onb .hn-field {
+  width: 100%;
+}
+.dm-onb .hn-label {
+  font-family: var(--font-mono);
+  letter-spacing: 1.4px;
+  color: var(--muted);
+}
+.dm-onb .hn-input-wrap {
+  background: var(--sunken);
+  border: 1px solid var(--line2);
+  height: 54px;
+  border-radius: 13px;
+  padding: 0 16px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.dm-onb .hn-input-wrap:focus-within {
+  border-color: var(--ember);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 122, 60, 0.18);
+}
+.dm-onb .hn-input {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+}
+.dm-onb .hn-input::placeholder {
+  color: var(--faint);
+}
+.dm-onb .hn-help {
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3px;
+}
+.dm-onb .hn-check {
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+.dm-onb .hn-check__box {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 1px solid var(--line2);
+  background: var(--sunken);
+  flex: 0 0 auto;
+  position: relative;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.dm-onb .hn-check[aria-checked='true'] .hn-check__box {
+  background: var(--ember);
+  border-color: var(--ember);
+}
+.dm-onb .hn-check[aria-checked='true'] .hn-check__box::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  width: 6px;
+  height: 11px;
+  border: solid #1a0f08;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(42deg);
+}
+.dm-onb .hn-switch__label {
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.35;
+  flex: 1;
+}
+
+/* primary button — the ember slab, matching the bet button */
+.dm-onb .hn-btn {
+  height: 56px;
+  font-size: 16px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, var(--ember), #e85a26);
+  box-shadow:
+    0 5px 0 #b8431c,
+    0 8px 22px rgba(255, 122, 60, 0.38);
+  color: #1a0f08;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border: 0;
+  transition:
+    transform 0.14s,
+    box-shadow 0.14s,
+    filter 0.14s;
+}
+.dm-onb .hn-btn:hover {
+  filter: brightness(1.05);
+}
+.dm-onb .hn-btn:active {
+  transform: translateY(5px);
+  box-shadow:
+    0 0 0 #b8431c,
+    0 8px 22px rgba(255, 122, 60, 0.38);
+}
+.dm-onb .hn-btn:disabled {
+  background: var(--surf2);
+  color: var(--faint);
+  box-shadow: none;
+  cursor: default;
+}
+
+/* ============ rules ============ */
+.dm-onb--rules {
+  padding: 0;
+}
+.dm-onb__rh {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+.dm-onb__rh-lab {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+.dm-onb__skip {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+}
+.dm-onb__skip:hover {
+  color: var(--ink);
+}
+
+.dm-onb__stage {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dm-onb__stage {
+    animation: dm-onb-slide 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both;
+  }
+}
+@keyframes dm-onb-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.dm-onb__rtitle {
+  margin: 30px 0 0;
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 1.15;
+}
+.dm-onb__rbody {
+  margin: 12px 0 0;
+  font-size: 15.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 300px;
+  text-wrap: pretty;
+}
+.dm-onb__rnote {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 122, 60, 0.1);
+  border: 1px solid rgba(255, 122, 60, 0.3);
+  border-radius: 12px;
+  padding: 9px 13px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.2px;
+  color: var(--ember2);
+  line-height: 1.35;
+  text-align: left;
+  max-width: 300px;
+}
+.dm-onb__rnote svg {
+  color: var(--ember);
+  flex: 0 0 auto;
+}
+
+.dm-onb__rfoot {
+  flex: 0 0 auto;
+  padding: 0 24px calc(26px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  z-index: 1;
+}
+.dm-onb__dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.dm-onb__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line2);
+  transition: all 0.25s;
+}
+.dm-onb__dot.is-on {
+  width: 22px;
+  border-radius: 999px;
+  background: var(--ember);
+}
+.dm-onb__rnav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dm-onb__back {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  border-radius: 15px;
+  border: 1px solid var(--line2);
+  background: var(--surf2);
+  color: var(--ink);
+  font-size: 22px;
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    border-color 0.15s;
+}
+.dm-onb__back:hover {
+  border-color: var(--ember);
+  color: var(--ember2);
+}
+.dm-onb__back:active {
+  transform: scale(0.92);
+}
+
+/* ---- rules visuals ---- */
+.dm-onb-vis {
+  height: 168px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.dm-onb-climb {
+  display: flex;
+  align-items: flex-end;
+}
+.dm-onb-climb__c {
+  margin-left: -22px;
+  transform: translateY(calc(var(--i) * -16px))
+    rotate(calc((var(--i) - 1) * 6deg));
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.5));
+}
+.dm-onb-climb__c:first-child {
+  margin-left: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dm-onb-climb__c {
+    animation: dm-onb-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--i) * 0.1s);
+  }
+}
+@keyframes dm-onb-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.dm-onb-x {
+  position: absolute;
+  right: 14px;
+  bottom: 18px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 30px;
+  color: var(--gold);
+  text-shadow: 0 0 22px rgba(217, 189, 134, 0.4);
+}
+
+.dm-onb-vis--dead .dm-death {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dm-onb-vis--dead .dm-death {
+    animation: dm-onb-slam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+@keyframes dm-onb-slam {
+  0% {
+    transform: scale(1.5) rotate(-7deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+.dm-onb-burn {
+  position: absolute;
+  bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e08a6e;
+}
+
+.dm-onb-cash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 200px;
+  height: 86px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--teal), #2f8c7e);
+  box-shadow:
+    0 5px 0 #246b60,
+    0 8px 26px rgba(70, 179, 162, 0.4);
+  color: #07140f;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dm-onb-cash {
+    animation: dm-onb-pulse 1.4s ease-in-out infinite;
+  }
+}
+@keyframes dm-onb-pulse {
+  50% {
+    box-shadow:
+      0 5px 0 #246b60,
+      0 8px 30px rgba(255, 176, 102, 0.6);
+  }
+}
+.dm-onb-cash__lab {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(7, 20, 15, 0.8);
+}
+.dm-onb-cash__amt {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 28px;
+  color: #08231b;
+}
+.dm-onb-cash__x {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(7, 20, 15, 0.75);
+}

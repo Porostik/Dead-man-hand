@@ -1,0 +1,28 @@
+/* High Noon DS — Spacing & layout tokens
+   4px base grid. Use --space-* for padding/gaps; --size-* for app frame. */
+
+:root {
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* component rhythm */
+  --gap-inline: var(--space-2); /* between chips/icons in a row */
+  --gap-stack: var(--space-4); /* between stacked blocks */
+  --pad-screen: var(--space-5); /* screen edge padding */
+  --pad-card: var(--space-4);
+
+  /* app frame (TG mini app — tall mobile) */
+  --app-width: 390px;
+  --app-height: 800px;
+  --tap-min: 44px; /* minimum hit target */
+  --bottomnav-h: 64px;
+}

@@ -1,0 +1,53 @@
+/* High Noon DS — Typography tokens */
+
+:root {
+  /* families */
+  --font-display:
+    'Rye', 'Zilla Slab', Georgia, serif; /* logo, hero, card numerals */
+  --font-text: 'Zilla Slab', Georgia, serif; /* UI + body */
+  --font-mono:
+    'Space Mono', ui-monospace, monospace; /* TON, ELO, timers, labels */
+
+  /* weights */
+  --fw-regular: 400; /* @kind other */
+  --fw-medium: 500; /* @kind other */
+  --fw-semibold: 600; /* @kind other */
+  --fw-bold: 700; /* @kind other */
+
+  /* display scale (Rye — use sparingly, always large) */
+  --display-xl: 56px; /* splash logo */
+  --display-lg: 44px; /* screen hero */
+  --display-md: 32px; /* section / win banner */
+  --display-sm: 24px; /* card numeral, small hero */
+
+  /* text scale (Zilla Slab) */
+  --text-2xl: 24px;
+  --text-xl: 20px;
+  --text-lg: 18px; /* titles */
+  --text-md: 15px; /* body default */
+  --text-sm: 13px; /* secondary */
+  --text-xs: 11px; /* captions */
+
+  /* mono scale (Space Mono) — numeric & label */
+  --mono-lg: 16px;
+  --mono-md: 13px;
+  --mono-sm: 11px;
+
+  /* line heights */
+  --lh-tight: 1.02; /* @kind other */
+  --lh-snug: 1.18; /* @kind other */
+  --lh-text: 1.45; /* @kind other */
+
+  /* letter spacing */
+  --ls-display: 0.4px;
+  --ls-label: 1.4px; /* uppercase mono labels */
+  --ls-tight: -0.2px;
+}
+
+/* element defaults */
+body {
+  font-family: var(--font-text);
+  font-size: var(--text-md);
+  line-height: var(--lh-text);
+  color: var(--text-body);
+}
