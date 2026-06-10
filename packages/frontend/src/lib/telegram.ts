@@ -22,6 +22,7 @@ import {
   mountViewport,
   expandViewport,
   bindViewportCssVars,
+  requestFullscreen,
   mountBackButton,
   hapticFeedbackImpactOccurred,
   type ImpactHapticFeedbackStyle,
@@ -101,6 +102,11 @@ export function initTelegram(): void {
       if (expandViewport.isAvailable()) expandViewport();
       if (bindViewportCssVars.isAvailable()) bindViewportCssVars();
     }
+  });
+  // Go fullscreen (TG 8.0+) so the app fills the screen and the TG header is
+  // hidden — our own header takes over (safe-area padding handled in CSS).
+  safe(() => {
+    if (requestFullscreen.isAvailable()) void requestFullscreen();
   });
   safe(() => {
     if (mountBackButton.isAvailable()) mountBackButton();
