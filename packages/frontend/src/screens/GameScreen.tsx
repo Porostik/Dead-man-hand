@@ -8,6 +8,7 @@ import {
   HistoryBar,
   RoundSuit,
   SuitWatermark,
+  Embers,
   DeckTop,
   TableCards,
   ComboBadge,
@@ -158,6 +159,7 @@ export function GameScreen() {
       {/* board */}
       <section className={feltClass}>
         <div className="dm-felt__sun" />
+        <Embers />
         <SuitWatermark suit={round.roundSuit} />
         <RoundSuit suit={round.roundSuit} />
         <DeckTop

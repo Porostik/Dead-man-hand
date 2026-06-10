@@ -81,6 +81,42 @@ export function SuitWatermark({ suit }: { suit: Suit }) {
   );
 }
 
+/* ----------------------------------------------------------- embers */
+/** Ambient sparks drifting up from the bottom of the board. */
+export function Embers({ count = 14 }: { count?: number }) {
+  const embers = useMemo(
+    () =>
+      Array.from({ length: count }, () => ({
+        left: Math.random() * 100,
+        size: 2 + Math.random() * 3.5,
+        dur: 4.5 + Math.random() * 5.5,
+        delay: Math.random() * 7,
+        drift: Math.round(Math.random() * 50 - 25),
+      })),
+    [count],
+  );
+  return (
+    <div className="dm-embers" aria-hidden="true">
+      {embers.map((e, i) => (
+        <span
+          key={i}
+          className="dm-ember"
+          style={
+            {
+              left: `${e.left}%`,
+              width: `${e.size}px`,
+              height: `${e.size}px`,
+              '--dur': `${e.dur}s`,
+              '--delay': `${e.delay}s`,
+              '--drift': `${e.drift}px`,
+            } as CSSProperties
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------- top deck */
 export function DeckTop({
   shuffling,
