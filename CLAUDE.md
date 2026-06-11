@@ -25,23 +25,28 @@ The MVP runs the engine **client-side** in the frontend. No backend needed.
 ## Current status (update me as things change)
 
 - ✅ Nx monorepo (pnpm), TS everywhere, `moduleResolution: bundler` (no `.js` in imports).
-- ✅ `@dmh/engine` — game core implemented + tested (`createRound`/`revealNext`/`cashOut`).
-- ✅ `frontend` — React+Vite app, engine wired via Zustand store. TanStack Router/Query set up.
+- ✅ `@dmh/engine` — reworked to the agreed mechanics: additive `X += weight`,
+  **round-suit +0.3**, suited poker-lite combos (Пара/Сет/Стрит/Флеш/☠ Dead Man's
+  Hand), escalating-hazard death. `createRound(config, rng)` predetermines the whole
+  round (provably-fair-ready). Tested.
+- ✅ `frontend` — React+Vite, engine via Zustand store + `useGameLoop` (auto-deal
+  pacing). TanStack Router/Query set up.
 - ✅ Backend removed (was a stub). Re-add in Phase 2: `pnpm nx g @nx/nest:app ...`.
 - ✅ **Design handoff received** (HTML/CSS from Claude Design, NOT Figma) — saved to
   `docs/design/handoff/`: the **High Noon** design system + the "Dead Men — Card
   Crash" prototype + screenshots + chat transcripts (design intent).
 - ✅ `@dmh/ui` — full port of the High Noon DS (tokens, `hn-*` components, western
   icon set). Showcase at the `/kit` route. `import '@dmh/ui/styles.css'` once.
-- 🚧 **Game screen is still a NEUTRAL PLACEHOLDER.** Next: build it from the handoff
-  design, composing `@dmh/ui`. The game-specific "dead-men" skin (`dm-*`) lives in
-  the frontend, not the DS.
-- ⚠️ **Design ↔ engine gap to reconcile before the game screen:** the prototype is
-  auto-deal (timer-paced), additive multiplier, **round-suit +0.3** bonus, suited
-  cards, escalating-hazard death, TON currency. Our engine is manual-reveal,
-  multiplicative, combo-based (no suits), flat `deadChance`, fake coins. Decide what
-  to adopt (likely: add suits + round-suit to the engine) — see `docs/design/handoff/chats/`.
-- ⬜ Then: verify `pnpm nx build frontend`; deploy to Vercel.
+- ✅ **Game screen + onboarding built** from the handoff, composing `@dmh/ui`. The
+  game-specific "dead-men" skin (`dm-*`) lives in the frontend, not the DS.
+- ✅ **TMA integration** (`@telegram-apps/sdk` + a local mock so `pnpm dev` runs in a
+  plain browser): **fullscreen + safe-area**; the game name sits in the TG controls
+  strip. Adapter in `frontend/src/lib/telegram.ts`.
+- ✅ **Deployed free on Vercel** — live at https://dmh-two.vercel.app
+  (`npx vercel --prod --archive=tgz`; SPA config in `vercel.json`).
+- 🚧 **Art assets** — `tools/gen-images.mjs` (fal.ai or a free provider) is ready;
+  blocked on credits / a free token. (Mascot deferred — see auto-memory.)
+- ⬜ Playtest with friends; watch replay behavior. Then Phase 1 (RTP math).
 
 ## Stack & layout
 

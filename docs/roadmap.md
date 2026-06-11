@@ -8,7 +8,7 @@ Gated phases. **Do not pull later-phase work forward** — each gate must pass f
 
 In scope:
 
-- `@dmh/engine` core: `createRound`, `revealNext`, `cashOut`, `GameConfig` ✅ done.
+- `@dmh/engine` core: `createRound` (predetermines the round) + `GameConfig` ✅ done.
 - `frontend`: playable game screen (from the user's own design), fake-coin balance,
   card reveals, cash-out, combos, juice. Engine runs client-side.
 - Deploy as a **free static site on Vercel** to show friends.
@@ -17,12 +17,16 @@ In scope:
 Out of scope: real money, crypto, provably-fair, RTP math, simulation, bankroll,
 backend, sockets, licensing.
 
+**Done so far:** engine reworked to the agreed mechanics; game screen + onboarding
+built from the design handoff (composing `@dmh/ui`); TMA integration
+(`@telegram-apps/sdk` + local mock, fullscreen + safe-area); deployed free on
+Vercel — live at https://dmh-two.vercel.app.
+
 **Immediate next steps:**
 
-1. Build the game screen from the user's design (Figma) — the current screen is a
-   neutral placeholder.
-2. `pnpm nx build frontend` green → deploy to Vercel.
-3. Give to friends; watch replay behavior.
+1. Art assets (mascot + paraphernalia) via `tools/gen-images.mjs` — blocked on an
+   image-gen provider (fal credits / free token).
+2. Give to friends; watch replay behavior.
 
 **Gate → Phase 1:** testers voluntarily replay; the 10-second feel reads as distinct.
 If it's not fun, stop/redesign — no math saves a boring loop.

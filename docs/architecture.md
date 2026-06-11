@@ -6,7 +6,8 @@
 dmh/
 ├─ packages/
 │  ├─ engine/     @dmh/engine — pure TS game core (RGS). Zero runtime deps.
-│  └─ frontend/   React + Vite TG Mini App. Runs the engine client-side.
+│  ├─ ui/         @dmh/ui — High Noon design system (React + Vite lib).
+│  └─ frontend/   React + Vite TG Mini App. Engine client-side, composes @dmh/ui.
 ├─ docs/          design · decisions · roadmap
 └─ .claude/skills/  engine-dev · game-balance
 ```
@@ -22,7 +23,7 @@ frontend (React/Vite, TG Mini App)          presentation + input
         │ imports @dmh/engine
         ▼
 packages/engine  (pure TS, zero deps)        ALL game rules (RGS core)
-  createRound · revealNext · cashOut · GameConfig · mulberry32 (seedable)
+  createRound (predetermines the whole round) · GameConfig · mulberry32 (seedable)
 ```
 
 ## Why the engine is its own library
@@ -48,12 +49,17 @@ there — it's app code, not engine). In Phase 2 the server owns the seed.
 ## MVP data flow (client-side)
 
 ```
-GameScreen ──bet──▶ gameStore (Zustand)
-   ▲                   │ createRound(config)
-   │ reveals / X       │ revealNext(state, config, rng)   ← @dmh/engine
-   └───────────────────┤ cashOut(state)
+GameScreen ──bet──▶ gameStore (Zustand)          ← TMA adapter: lib/telegram.ts
+   ▲                   │ createRound(config, rng)   ← @dmh/engine rolls the WHOLE
+   │ deal tick / X     │   round up-front (suit, dead index, every card)
+   │ (useGameLoop)     │ store steps `dealtCount` through round.sequence
+   └───────────────────┤ cash-out = bet * multiplier (computed in the store)
                        ▼ balance updated (fake coins)
 ```
+
+`useGameLoop` paces the auto-deal (shuffle → deal each card → bust → next round);
+the store never reimplements rules — it just advances `dealtCount` into the
+engine-predetermined `round.sequence` and reads `multiplier` off the dealt cards.
 
 ## Phase 2 shift (real money)
 
