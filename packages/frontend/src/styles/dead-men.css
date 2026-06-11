@@ -1576,7 +1576,24 @@ body {
 /* ---------------- bottom ---------------- */
 .dm-bottom {
   flex: 0 0 auto;
+  position: relative;
   padding: 16px 20px calc(18px + env(safe-area-inset-bottom));
+}
+/* solid panel surface — a bottom sheet the coins tuck BEHIND (z between the coins and
+   the controls), so they only peek above its top edge. */
+.dm-bottom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, #1f160f, #150e09);
+  border-top: 1px solid var(--line2);
+  box-shadow: 0 -10px 26px rgba(0, 0, 0, 0.45);
+}
+/* controls sit on TOP of the panel surface */
+.dm-bottom__content {
+  position: relative;
+  z-index: 2;
 }
 .dm-betpanel {
   display: flex;
@@ -2251,7 +2268,7 @@ body {
 .dm-slot {
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--surf2);
+  background: transparent;
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
@@ -2832,4 +2849,128 @@ body {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* ---------------- generated gold attributes (coins/badge/...) ---------------- */
+/* Source PNGs are gold-on-near-black. As DIRECT children of the dark felt,
+   `mix-blend-mode: screen` makes the black background vanish and the gold glow like
+   real props on the table — no alpha channel / background removal needed. (An
+   isolating wrapper would trap the blend, so the props sit straight on the felt.) */
+.dm-item {
+  display: inline-flex;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+.dm-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* felt props — pushed partly off the edges so they read as table clutter */
+.dm-prop {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.dm-prop--coins {
+  left: -4%;
+  /* z-index BELOW the bottom-panel surface (.dm-bottom::before) so the whole solid
+     panel covers the pile; only the crown peeks above the panel's top edge. */
+  z-index: 0;
+  bottom: calc(100% - 58px);
+  width: 140px;
+  height: 140px;
+  transform: rotate(0deg);
+  animation: dm-coins-tremble 2.4s ease-in-out infinite;
+}
+/* slow, gentle tremble — smooth sway, a touch more visible */
+@keyframes dm-coins-tremble {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(1.1px, -0.3px) rotate(1.1deg);
+  }
+  66% {
+    transform: translate(-1px, 0.3px) rotate(-0.9deg);
+  }
+}
+.dm-prop--badge {
+  right: -7%;
+  top: -5%;
+  width: 102px;
+  height: 102px;
+  transform: rotate(8deg);
+}
+/* sweeping glint, clipped to the star itself: the badge PNG is the luminance mask
+   (bright gold = visible, black bg = hidden), so the streak only rides the metal. */
+.dm-prop--badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 36%,
+    rgba(255, 255, 255, 0.85) 46%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.85) 54%,
+    transparent 64%
+  );
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  mask-image: url(../assets/items/sheriff-badge.png);
+  -webkit-mask-image: url(../assets/items/sheriff-badge.png);
+  mask-mode: luminance;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mix-blend-mode: screen;
+  animation: dm-star-glint 3.2s ease-in-out infinite;
+}
+/* sweep across once, then rest off-screen for the rest of the cycle */
+@keyframes dm-star-glint {
+  0% {
+    background-position: 210% 0;
+  }
+  28% {
+    background-position: -110% 0;
+  }
+  100% {
+    background-position: -110% 0;
+  }
+}
+.dm-felt.is-bust .dm-prop {
+  opacity: 0.4;
+}
+
+/* /kit tiles: the asset's near-black bg blends into the dark tile (no blend needed) */
+.kit-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.kit-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--hn-text-dim, #9a8f80);
+}
+.kit-item .dm-item {
+  width: 72px;
+  height: 72px;
+  padding: 6px;
+  border-radius: 16px;
+  background: radial-gradient(60% 60% at 50% 45%, #221409, #120b07 85%);
+  box-shadow: inset 0 0 0 1px rgba(255, 190, 110, 0.14);
 }

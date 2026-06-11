@@ -26,41 +26,67 @@ const SIZES = {
   landscape_16_9: [1280, 720],
 };
 
+// Shared style so the whole set is visually consistent and easy to composite.
+// Pure-black bg + isolated/centered subject → drops onto the dark felt cleanly
+// via mix-blend-mode: screen/lighten (flux has no real alpha channel).
+const STYLE =
+  'warm rust, ember-orange and antique-gold palette, glowing embers, dramatic ' +
+  'low rim light, centered isolated subject on a pure black background, premium ' +
+  'Wild-West mobile game art, highly detailed digital illustration, no text, no border';
+
 /** @type {{name:string, prompt:string, image_size?:keyof typeof SIZES}[]} */
 const JOBS = [
   {
     name: 'mascot',
     image_size: 'portrait_4_3',
     prompt:
-      'Mascot for a Wild-West card crash game "Dead Men". A stylized skeleton ' +
-      'gunslinger bust wearing a worn cowboy hat, glowing eyes, holding a fan of ' +
-      'playing cards (aces and eights). Warm rust, ember-orange and gold palette ' +
-      'on a near-black background, dramatic low rim light, premium mobile game art, ' +
-      'clean centered composition, digital illustration, high detail.',
+      'Mascot for a Wild-West card-crash game "Dead Men": a skeletal bony hand ' +
+      'of death rising up from below, bare weathered bone fingers, fanning out a ' +
+      'spread of old worn playing cards, tattered dark leather sleeve cuff at the ' +
+      'wrist. ' + STYLE,
   },
   {
     name: 'gold-ring',
     image_size: 'square_hd',
     prompt:
-      'A single ornate gold ring, Wild-West / poker prize style, polished warm ' +
-      'gold with subtle engraving, centered on a near-black background, soft ' +
-      'dramatic rim light, premium mobile game item icon, high detail, 3D render.',
+      'A single ornate gold ring standing upright, Wild-West poker prize, ' +
+      'polished antique gold with subtle engraving. ' + STYLE,
+  },
+  {
+    name: 'gold-coins',
+    image_size: 'square_hd',
+    prompt:
+      'A neat pile of shiny gold coins, Wild-West saloon style, bright golden ' +
+      'highlights, 3D render. ' + STYLE,
   },
   {
     name: 'bullets',
     image_size: 'square_hd',
     prompt:
-      'A few brass bullet cartridges scattered on a dark worn wooden saloon ' +
-      'table, warm gold and rust tones, ember rim light, near-black background, ' +
-      'premium Wild-West game art, high detail, slight top-down angle.',
+      'A small group of three brass bullet cartridges standing and lying ' +
+      'together, gold and rust tones, 3D render. ' + STYLE,
   },
+  // "что-то ещё" candidates — run explicitly: node tools/gen-images.mjs sheriff-badge revolver poker-chips
   {
-    name: 'coins-hat',
+    name: 'sheriff-badge',
     image_size: 'square_hd',
     prompt:
-      'A pile of shiny gold coins with a small black cowboy hat resting on top ' +
-      'in the center, warm gold tones, near-black background, soft dramatic ' +
-      'light, premium Wild-West game icon, high detail, 3D render.',
+      'A six-point sheriff star badge in polished antique gold with subtle ' +
+      'engraving, Wild-West style, 3D render. ' + STYLE,
+  },
+  {
+    name: 'revolver',
+    image_size: 'square_hd',
+    prompt:
+      'A single ornate Wild-West revolver, engraved antique-gold and gunmetal ' +
+      'finish, 3D render. ' + STYLE,
+  },
+  {
+    name: 'poker-chips',
+    image_size: 'square_hd',
+    prompt:
+      'A small stack of poker chips in black, gold and deep red, Wild-West ' +
+      'saloon style, 3D render. ' + STYLE,
   },
 ];
 

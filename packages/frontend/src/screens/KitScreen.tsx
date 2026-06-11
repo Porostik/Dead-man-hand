@@ -34,6 +34,7 @@ import {
   BottomNav,
 } from '@dmh/ui';
 import { CardFlame } from '../components/game/board';
+import { ItemIcon, type ItemName } from '../components/game/ItemIcon';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -288,6 +289,18 @@ export function KitScreen() {
                   </div>
                 </div>
               ))}
+            </div>
+          </Cell>
+          <Cell cap="Item art (generated)">
+            <div className="kit-items">
+              {(['coins', 'chips', 'ring', 'bullets', 'badge'] as ItemName[]).map(
+                (n) => (
+                  <span key={n} className="kit-item">
+                    <ItemIcon name={n} />
+                    {n}
+                  </span>
+                ),
+              )}
             </div>
           </Cell>
           <div className="kit-row">

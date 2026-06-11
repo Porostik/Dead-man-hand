@@ -17,6 +17,7 @@ import {
 } from '../components/game/board';
 import { BetPanel, CashOutBar } from '../components/game/bet';
 import { SettingsDrawer } from '../components/game/SettingsDrawer';
+import { ItemIcon } from '../components/game/ItemIcon';
 import { RuleSlides } from '../components/game/rules';
 import { Icon, Drawer } from '@dmh/ui';
 
@@ -187,6 +188,7 @@ export function GameScreen() {
       {/* board */}
       <section className={feltClass}>
         <div className="dm-felt__sun" />
+        <ItemIcon name="badge" className="dm-prop dm-prop--badge" />
         <Embers />
         <SuitWatermark suit={round.roundSuit} />
         <RoundSuit suit={round.roundSuit} />
@@ -256,7 +258,14 @@ export function GameScreen() {
       </section>
 
       {/* bottom */}
-      <section className="dm-bottom">{shuffling ? <BetPanel /> : <CashOutBar />}</section>
+      <section className="dm-bottom">
+        {/* coins peek out from behind the bet panel's top edge — anchored to the
+            panel (their parent), so the tuck is identical in shuffle and play */}
+        <ItemIcon name="coins" className="dm-prop dm-prop--coins" />
+        <div className="dm-bottom__content">
+          {shuffling ? <BetPanel /> : <CashOutBar />}
+        </div>
+      </section>
 
       <SettingsDrawer
         open={settingsOpen}
