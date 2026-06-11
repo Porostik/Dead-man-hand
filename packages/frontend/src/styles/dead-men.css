@@ -2212,7 +2212,7 @@ body {
 /* game name: two lines (DEAD MEN / HAND), centered in the controls row */
 .tg-fullscreen .dm-wordmark {
   position: absolute;
-  top: calc(var(--dm-island) + 16px);
+  top: calc(var(--dm-island) + 12px);
   left: 0;
   right: 0;
   flex-direction: column; /* DEAD MEN / HAND on two lines */
