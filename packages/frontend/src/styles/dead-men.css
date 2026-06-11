@@ -266,7 +266,7 @@ body {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate(-50%, 0) scale(1);
   }
 }
 .dm-tick__item {
