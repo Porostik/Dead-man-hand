@@ -2180,10 +2180,7 @@ body {
         env(safe-area-inset-top, 0px)
       ) + var(--tg-viewport-content-safe-area-inset-top, 0px)
   );
-  padding-bottom: max(
-    var(--tg-viewport-safe-area-inset-bottom, 0px),
-    env(safe-area-inset-bottom, 0px)
-  );
+  padding-bottom: 0;
 }
 
 /* ---------------------------------------------------------------------------
@@ -2375,7 +2372,7 @@ body {
 .dm-app--live .dm-bottom {
   background: var(--surf2, #1e150f);
   border-top: 1px solid var(--line);
-  padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+  padding: 8px 12px calc(10px + max(var(--tg-viewport-safe-area-inset-bottom, 0px), env(safe-area-inset-bottom, 0px)));
 }
 .dm-betpanel--multi {
   gap: 8px;
@@ -2437,3 +2434,10 @@ body {
 .dm-cashbar--idle {
   min-height: 120px;
 }
+
+/* shorter bottom panel → bigger board */
+.dm-cashrow { min-height: 124px; }
+.dm-cashout--multi { min-height: 78px; }
+.dm-cashbar--idle { min-height: 92px; }
+.dm-betpanel--multi { gap: 6px; }
+.dm-slot { padding: 7px 9px; gap: 6px; }
