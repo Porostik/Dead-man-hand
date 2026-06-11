@@ -2209,7 +2209,7 @@ body {
 /* game name: two lines (DEAD MEN / HAND), centered in the controls row */
 .tg-fullscreen .dm-wordmark {
   position: absolute;
-  top: calc(var(--dm-island) + 12px);
+  top: calc(var(--dm-island) + var(--dm-controls) - 36px);
   left: 0;
   right: 0;
   flex-direction: column; /* DEAD MEN / HAND on two lines */
@@ -2445,4 +2445,9 @@ body {
 /* shuffle: lift the progress bar/timer up off the bottom a touch */
 .dm-stage--shuffle {
   padding-bottom: 54px;
+}
+
+/* TG: tighten the gap between the title strip and the balance/chat header */
+.tg-fullscreen .dm-header {
+  padding-top: 2px;
 }
