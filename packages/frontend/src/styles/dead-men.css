@@ -2203,7 +2203,7 @@ body {
     env(safe-area-inset-top, 0px),
     54px
   );
-  --dm-controls: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 40px);
+  --dm-controls: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 52px);
 }
 /* push all app content below the island + TG controls */
 .tg-fullscreen .dm-app--live {
@@ -2212,7 +2212,7 @@ body {
 /* game name: two lines (DEAD MEN / HAND), centered in the controls row */
 .tg-fullscreen .dm-wordmark {
   position: absolute;
-  top: calc(var(--dm-island) + 4px);
+  top: calc(var(--dm-island) + 16px);
   left: 0;
   right: 0;
   flex-direction: column; /* DEAD MEN / HAND on two lines */
