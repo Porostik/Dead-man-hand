@@ -2716,5 +2716,43 @@ body {
 
 /* keep the drawer close button clear of the TG island/controls */
 .tg-fullscreen .hn-drawer__close {
-  top: calc(var(--dm-island) + 6px);
+  top: calc(var(--dm-island) + var(--dm-controls) + 4px);
+}
+
+/* full rules drawer must be true 100dvh (beat the top-sheet max-height) */
+.dm-app--live .hn-drawer--full {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+
+/* combo flame drawn as an SVG (real tongues, not a soft glow) */
+.dm-card-wrap.is-combo-hit::before {
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%2060%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%271%27%20x2%3D%270%27%20y2%3D%270%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23d8330a%27%2F%3E%3Cstop%20offset%3D%27.4%27%20stop-color%3D%27%23ff6a14%27%2F%3E%3Cstop%20offset%3D%27.75%27%20stop-color%3D%27%23ffb13a%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23ffe58a%27%2F%3E%3C%2FlinearGradient%3E%3Cpath%20fill%3D%27url%28%23g%29%27%20d%3D%27M8%2060%20C%206%2044%2014%2040%2018%2028%20C%2020%2038%2024%2038%2026%2032%20C%2030%2046%2034%2048%2036%2060%20Z%20M38%2060%20C%2036%2040%2046%2034%2050%2018%20C%2054%2034%2060%2036%2060%2046%20C%2062%2038%2066%2036%2066%2030%20C%2070%2046%2066%2052%2062%2060%20Z%20M64%2060%20C%2064%2046%2072%2042%2076%2032%20C%2078%2040%2082%2040%2084%2036%20C%2088%2048%2092%2050%2092%2060%20Z%27%2F%3E%3C%2Fsvg%3E") no-repeat center bottom;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 120, 40, 0.65));
+  mix-blend-mode: normal;
+  animation: dm-flame 0.16s steps(2, end) infinite alternate;
+}
+
+/* combos slide: smaller cards, less overlap, scrollable stage */
+.dm-onb-combo__cards {
+  zoom: 0.78;
+}
+.dm-onb-combo__cards .hn-pcard {
+  margin-left: -14px;
+}
+.dm-onb__stage {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* drawer close button: top-LEFT on top drawers (TG controls live top-right) */
+.hn-drawer--top .hn-drawer__close {
+  left: 14px;
+  right: auto;
+}
+.tg-fullscreen .hn-drawer--top .hn-drawer__close {
+  top: calc(var(--dm-island) + 4px);
 }

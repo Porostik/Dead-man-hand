@@ -1,4 +1,9 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import {
+  useRef,
+  type HTMLAttributes,
+  type ReactNode,
+  type TouchEvent as ReactTouchEvent,
+} from 'react';
 
 /* ---------------------------------------------------------------- Card */
 export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -81,8 +86,19 @@ export function Drawer({
   side = 'bottom',
   full = false,
 }: DrawerProps) {
+  const startY = useRef<number | null>(null);
   if (!open) return null;
   const handle = <div className="hn-drawer__handle" />;
+  // swipe to dismiss: up for a top sheet, down for a bottom sheet
+  const onTouchStart = (e: ReactTouchEvent) => {
+    startY.current = e.touches[0]?.clientY ?? null;
+  };
+  const onTouchEnd = (e: ReactTouchEvent) => {
+    if (startY.current == null) return;
+    const dy = (e.changedTouches[0]?.clientY ?? startY.current) - startY.current;
+    startY.current = null;
+    if ((side === 'top' && dy < -56) || (side === 'bottom' && dy > 56)) onClose?.();
+  };
   return (
     <>
       <div className="hn-drawer__scrim" onClick={onClose} />
@@ -92,6 +108,8 @@ export function Drawer({
         }`}
         role="dialog"
         aria-modal="true"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
         {!full && side === 'bottom' && handle}
         {onClose && (

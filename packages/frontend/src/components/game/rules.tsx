@@ -134,14 +134,14 @@ export function RuleSlides({
 
   return (
     <div className="dm-onb dm-onb--rules">
-      <div className="dm-onb__rh">
-        <span className="dm-onb__rh-lab">КАК ЭТО РАБОТАЕТ</span>
-        {!hideSkip && (
+      {!hideSkip && (
+        <div className="dm-onb__rh">
+          <span className="dm-onb__rh-lab">КАК ЭТО РАБОТАЕТ</span>
           <button type="button" className="dm-onb__skip" onClick={onDone}>
             Пропустить
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="dm-onb__stage" key={step}>
         {slide.visual}
