@@ -98,7 +98,9 @@ const SLIDES: Slide[] = [
           >
             <div className="dm-onb-combo__cards">
               {c.cards.map((card, i) => (
-                <PlayingCard key={i} rank={card.rank} suit={card.suit} size="sm" />
+                <span key={i} className="dm-onb-combo__c" style={{ zIndex: i }}>
+                  <PlayingCard rank={card.rank} suit={card.suit} size="sm" />
+                </span>
               ))}
             </div>
             <div className="dm-onb-combo__txt">

@@ -2756,3 +2756,47 @@ body {
 .tg-fullscreen .hn-drawer--top .hn-drawer__close {
   top: calc(var(--dm-island) + 4px);
 }
+
+
+/* smoother, softer flame + smooth (non-stepped) flicker */
+.dm-card-wrap.is-combo-hit::before {
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%2060%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%271%27%20x2%3D%270%27%20y2%3D%270%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23d8330a%27%2F%3E%3Cstop%20offset%3D%27.4%27%20stop-color%3D%27%23ff6a14%27%2F%3E%3Cstop%20offset%3D%27.75%27%20stop-color%3D%27%23ffb13a%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23ffe58a%27%2F%3E%3C%2FlinearGradient%3E%3Cpath%20fill%3D%27url%28%23g%29%27%20d%3D%27M6%2060%20C%200%2042%2012%2040%2016%2026%20C%2018%2018%2022%2016%2024%2022%20C%2026%2028%2028%2030%2030%2028%20C%2034%2040%2034%2050%2034%2060%20Z%20M34%2060%20C%2032%2038%2046%2034%2050%2016%20C%2054%2032%2060%2034%2060%2044%20C%2064%2036%2068%2036%2070%2030%20C%2074%2044%2070%2052%2064%2060%20Z%20M62%2060%20C%2062%2044%2072%2042%2078%2030%20C%2080%2038%2084%2038%2086%2036%20C%2090%2048%2094%2050%2094%2060%20Z%27%2F%3E%3C%2Fsvg%3E") no-repeat center bottom;
+  background-size: 100% 100%;
+  filter: blur(1.3px) drop-shadow(0 0 6px rgba(255, 120, 40, 0.6));
+  animation: dm-flame 1s ease-in-out infinite;
+  bottom: 75%;
+  height: 64%;
+  width: 128%;
+}
+@keyframes dm-flame {
+  0% { transform: translateX(-50%) scaleY(1) scaleX(1); }
+  25% { transform: translateX(-51%) scaleY(1.16) scaleX(0.95); }
+  50% { transform: translateX(-49%) scaleY(0.94) scaleX(1.05); }
+  75% { transform: translateX(-51%) scaleY(1.12) scaleX(0.97); }
+  100% { transform: translateX(-50%) scaleY(1) scaleX(1); }
+}
+
+/* combos slide: right card stacks ON TOP of the left (z per index) */
+.dm-onb-combo__c {
+  position: relative;
+  display: inline-flex;
+}
+.dm-onb-combo__c:not(:first-child) {
+  margin-left: -14px;
+}
+.dm-onb-combo__cards .hn-pcard {
+  margin-left: 0;
+}
+
+/* drawer close button: back to top-RIGHT, and clearly below the TG controls */
+.hn-drawer--top .hn-drawer__close {
+  left: auto;
+  right: 14px;
+}
+.tg-fullscreen .hn-drawer--top .hn-drawer__close {
+  top: calc(var(--dm-island) + var(--dm-controls) + 16px);
+}
+/* push the top-drawer content further below the TG controls */
+.tg-fullscreen .hn-drawer--top {
+  padding-top: calc(var(--dm-island) + var(--dm-controls) + 16px);
+}
