@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router';
 import { Home } from './screens/Home';
 import { KitScreen } from './screens/KitScreen';
+import { LabScreen } from './screens/LabScreen';
 
 const rootRoute = createRootRoute({ component: Outlet });
 
@@ -21,7 +22,13 @@ const kitRoute = createRoute({
   component: KitScreen,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, kitRoute]);
+const labRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/lab',
+  component: LabScreen,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, kitRoute, labRoute]);
 
 export const router = createRouter({ routeTree });
 
