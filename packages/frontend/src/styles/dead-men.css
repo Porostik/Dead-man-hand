@@ -2185,3 +2185,28 @@ body {
     env(safe-area-inset-bottom, 0px)
   );
 }
+
+/* TG fullscreen only: lift the game name up into the top safe-area strip (the
+   row with the native TG buttons), centered between them on a single line. The
+   header below then holds just the balance (left) + chat (right). In a normal
+   browser there's no .tg-fullscreen class, so the header stays as-is. */
+.dm-app--live {
+  position: relative; /* containing block for the title strip */
+}
+.tg-fullscreen .dm-wordmark {
+  position: absolute;
+  top: var(--tg-viewport-safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  height: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 30px);
+  flex-direction: row;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+  pointer-events: none; /* never block the native TG buttons */
+}
+.tg-fullscreen .dm-wordmark__main {
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}

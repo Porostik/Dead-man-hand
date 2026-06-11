@@ -23,6 +23,7 @@ import {
   expandViewport,
   bindViewportCssVars,
   requestFullscreen,
+  isFullscreen,
   mountBackButton,
   hapticFeedbackImpactOccurred,
   type ImpactHapticFeedbackStyle,
@@ -105,8 +106,19 @@ export function initTelegram(): void {
   });
   // Go fullscreen (TG 8.0+) so the app fills the screen and the TG header is
   // hidden — our own header takes over (safe-area padding handled in CSS).
+  // Reflect the state onto <html class="tg-fullscreen"> so the layout can lift
+  // the game name up into the TG controls strip (between the native buttons).
   safe(() => {
     if (requestFullscreen.isAvailable()) void requestFullscreen();
+    const sync = () => {
+      try {
+        document.documentElement.classList.toggle('tg-fullscreen', !!isFullscreen());
+      } catch {
+        /* ignore */
+      }
+    };
+    sync();
+    if (typeof isFullscreen.sub === 'function') isFullscreen.sub(sync);
   });
   safe(() => {
     if (mountBackButton.isAvailable()) mountBackButton();
