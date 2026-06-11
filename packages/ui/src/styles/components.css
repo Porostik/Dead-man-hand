@@ -584,6 +584,24 @@
   background: var(--border-soft);
   margin: 0 auto var(--space-5);
 }
+.hn-drawer--top {
+  top: 0;
+  bottom: auto;
+  border-top: 0;
+  border-bottom: var(--border-2) solid var(--border-strong);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--pad-screen)
+    var(--space-5);
+  animation: hn-drop var(--dur-slow) var(--ease-out);
+}
+.hn-drawer--top .hn-drawer__handle {
+  margin: var(--space-5) auto 0;
+}
+@keyframes hn-drop {
+  from {
+    transform: translateY(-100%);
+  }
+}
 .hn-drawer__title {
   font-family: var(--font-display);
   font-size: var(--display-sm);

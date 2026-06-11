@@ -125,8 +125,16 @@ export function initTelegram(): void {
   });
 }
 
-/** Fire a haptic impact (no-op outside Telegram). */
+let hapticEnabled = true;
+
+/** Toggle haptics (wired to the Vibration setting). */
+export function setHapticEnabled(on: boolean): void {
+  hapticEnabled = on;
+}
+
+/** Fire a haptic impact (no-op outside Telegram or when vibration is off). */
 export function haptic(style: ImpactHapticFeedbackStyle = 'light'): void {
+  if (!hapticEnabled) return;
   safe(() => {
     if (hapticFeedbackImpactOccurred.isAvailable()) {
       hapticFeedbackImpactOccurred(style);

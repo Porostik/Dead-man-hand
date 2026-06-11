@@ -16,6 +16,9 @@ import {
   ShuffleTimer,
 } from '../components/game/board';
 import { BetPanel, CashOutBar } from '../components/game/bet';
+import { SettingsDrawer } from '../components/game/SettingsDrawer';
+import { RuleSlides } from '../components/game/rules';
+import { Icon, Drawer } from '@dmh/ui';
 
 const SHUFFLE_SECS = 5;
 
@@ -122,6 +125,9 @@ export function GameScreen() {
     topup();
   };
 
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
+
   const feltClass = ['dm-felt', busted && 'is-bust', heatTier && `is-heat-${heatTier}`]
     .filter(Boolean)
     .join(' ');
@@ -147,20 +153,33 @@ export function GameScreen() {
           <span className="dm-wordmark__main">HAND</span>
         </div>
 
-        <button type="button" className="dm-chat" aria-label="Чат">
-          <svg
-            viewBox="0 0 24 24"
-            width={18}
-            height={18}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <div className="dm-header__right">
+          <button
+            type="button"
+            className="dm-chat"
+            aria-label="Настройки"
+            onClick={() => {
+              haptic('light');
+              setSettingsOpen(true);
+            }}
           >
-            <path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z" />
-          </svg>
-        </button>
+            <Icon name="gear" size={18} />
+          </button>
+          <button type="button" className="dm-chat" aria-label="Чат">
+            <svg
+              viewBox="0 0 24 24"
+              width={18}
+              height={18}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       <HistoryBar history={history} />
@@ -238,6 +257,18 @@ export function GameScreen() {
 
       {/* bottom */}
       <section className="dm-bottom">{shuffling ? <BetPanel /> : <CashOutBar />}</section>
+
+      <SettingsDrawer
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        onRules={() => {
+          setSettingsOpen(false);
+          setRulesOpen(true);
+        }}
+      />
+      <Drawer open={rulesOpen} onClose={() => setRulesOpen(false)} side="top">
+        <RuleSlides onDone={() => setRulesOpen(false)} doneLabel="Понятно" />
+      </Drawer>
     </main>
   );
 }
