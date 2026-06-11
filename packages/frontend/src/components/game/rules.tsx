@@ -17,12 +17,28 @@ const CLIMB: Array<{ rank: Rank; suit: Suit }> = [
   { rank: 'K', suit: 'club' },
 ];
 
-const COMBOS: Array<{ name: string; desc: string; jackpot?: boolean }> = [
-  { name: 'ПАРА', desc: 'две одинаковые подряд' },
-  { name: 'СЕТ', desc: 'три одинаковые подряд' },
-  { name: 'СТРИТ', desc: 'три по порядку' },
-  { name: 'ФЛЕШ', desc: 'три одной масти подряд' },
-  { name: "☠ DEAD MAN'S HAND", desc: 'тузы и восьмёрки — джекпот', jackpot: true },
+const COMBOS: Array<{
+  name: string;
+  desc: string;
+  cards: ReadonlyArray<{ rank: Rank; suit: Suit }>;
+  jackpot?: boolean;
+}> = [
+  { name: 'ПАРА', desc: 'две подряд', cards: [
+    { rank: 'K', suit: 'spade' }, { rank: 'K', suit: 'heart' },
+  ] },
+  { name: 'СЕТ', desc: 'три подряд', cards: [
+    { rank: '7', suit: 'club' }, { rank: '7', suit: 'diamond' }, { rank: '7', suit: 'spade' },
+  ] },
+  { name: 'СТРИТ', desc: 'три по порядку', cards: [
+    { rank: '9', suit: 'heart' }, { rank: '10', suit: 'spade' }, { rank: 'J', suit: 'club' },
+  ] },
+  { name: 'ФЛЕШ', desc: 'три одной масти', cards: [
+    { rank: '4', suit: 'spade' }, { rank: '9', suit: 'spade' }, { rank: 'K', suit: 'spade' },
+  ] },
+  { name: "DEAD MAN'S HAND", desc: 'тузы и восьмёрки · джекпот', jackpot: true, cards: [
+    { rank: 'A', suit: 'spade' }, { rank: 'A', suit: 'club' },
+    { rank: '8', suit: 'spade' }, { rank: '8', suit: 'heart' },
+  ] },
 ];
 
 const SLIDES: Slide[] = [
@@ -80,8 +96,18 @@ const SLIDES: Slide[] = [
             key={c.name}
             className={`dm-onb-combo${c.jackpot ? ' is-jackpot' : ''}`}
           >
-            <span className="dm-onb-combo__n">{c.name}</span>
-            <span className="dm-onb-combo__d">{c.desc}</span>
+            <div className="dm-onb-combo__cards">
+              {c.cards.map((card, i) => (
+                <PlayingCard key={i} rank={card.rank} suit={card.suit} size="sm" />
+              ))}
+            </div>
+            <div className="dm-onb-combo__txt">
+              <span className="dm-onb-combo__n">
+                {c.jackpot ? '☠ ' : ''}
+                {c.name}
+              </span>
+              <span className="dm-onb-combo__d">{c.desc}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -96,9 +122,11 @@ const SLIDES: Slide[] = [
 export function RuleSlides({
   onDone,
   doneLabel = 'РАЗДАВАЙ',
+  hideSkip = false,
 }: {
   onDone: () => void;
   doneLabel?: string;
+  hideSkip?: boolean;
 }) {
   const [step, setStep] = useState(0);
   const slide = SLIDES[step];
@@ -108,9 +136,11 @@ export function RuleSlides({
     <div className="dm-onb dm-onb--rules">
       <div className="dm-onb__rh">
         <span className="dm-onb__rh-lab">КАК ЭТО РАБОТАЕТ</span>
-        <button type="button" className="dm-onb__skip" onClick={onDone}>
-          Пропустить
-        </button>
+        {!hideSkip && (
+          <button type="button" className="dm-onb__skip" onClick={onDone}>
+            Пропустить
+          </button>
+        )}
       </div>
 
       <div className="dm-onb__stage" key={step}>

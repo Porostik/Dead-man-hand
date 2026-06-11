@@ -93,10 +93,20 @@ export function Drawer({
         role="dialog"
         aria-modal="true"
       >
-        {side === 'bottom' && handle}
+        {!full && side === 'bottom' && handle}
+        {onClose && (
+          <button
+            type="button"
+            className="hn-drawer__close"
+            aria-label="Закрыть"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
         {title && <h2 className="hn-drawer__title">{title}</h2>}
         {children}
-        {side === 'top' && handle}
+        {!full && side === 'top' && handle}
       </div>
     </>
   );

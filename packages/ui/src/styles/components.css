@@ -609,6 +609,24 @@
   border-radius: 0;
   padding: 0;
 }
+.hn-drawer__close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + var(--space-3));
+  right: var(--space-4);
+  z-index: 60;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: var(--border-1) solid var(--border-hairline);
+  background: var(--surface-1);
+  color: var(--text-body);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
 .hn-drawer__title {
   font-family: var(--font-display);
   font-size: var(--display-sm);

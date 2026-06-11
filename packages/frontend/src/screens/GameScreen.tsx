@@ -267,7 +267,7 @@ export function GameScreen() {
         }}
       />
       <Drawer open={rulesOpen} onClose={() => setRulesOpen(false)} side="top" full>
-        <RuleSlides onDone={() => setRulesOpen(false)} doneLabel="Понятно" />
+        <RuleSlides onDone={() => setRulesOpen(false)} doneLabel="Понятно" hideSkip />
       </Drawer>
     </main>
   );

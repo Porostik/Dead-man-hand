@@ -2651,3 +2651,70 @@ body {
 .tg-fullscreen .dm-onb {
   padding-top: calc(var(--dm-island) + var(--dm-controls));
 }
+
+/* flame BEHIND the card, organic tongues licking up from the top edge */
+.dm-card-wrap.is-combo-hit .dm-card-fly {
+  position: relative;
+  z-index: 1;
+}
+.dm-card-wrap.is-combo-hit::before {
+  bottom: 78%;
+  width: 124%;
+  height: 72%;
+  z-index: 0;
+  filter: blur(2.4px);
+  background:
+    radial-gradient(20% 70% at 20% 100%, rgba(255, 140, 45, 0.9), transparent 72%),
+    radial-gradient(18% 94% at 38% 100%, rgba(255, 210, 115, 1), transparent 72%),
+    radial-gradient(15% 82% at 54% 100%, rgba(255, 238, 165, 1), transparent 70%),
+    radial-gradient(18% 94% at 68% 100%, rgba(255, 200, 100, 1), transparent 72%),
+    radial-gradient(20% 70% at 84% 100%, rgba(255, 150, 55, 0.9), transparent 72%);
+  animation: dm-flame 0.2s ease-in-out infinite alternate;
+}
+@keyframes dm-flame {
+  from {
+    transform: translateX(-50%) scaleY(0.85) scaleX(1.05);
+    opacity: 0.82;
+  }
+  to {
+    transform: translateX(-50%) scaleY(1.32) scaleX(0.9);
+    opacity: 1;
+  }
+}
+
+/* combos slide: real overlapping cards per combo */
+.dm-onb-combos {
+  gap: 6px;
+  max-width: 340px;
+}
+.dm-onb-combo {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 5px 12px 5px 8px;
+}
+.dm-onb-combo__cards {
+  display: flex;
+  flex: 0 0 auto;
+}
+.dm-onb-combo__cards .hn-pcard {
+  margin-left: -26px;
+  box-shadow: -3px 1px 6px rgba(0, 0, 0, 0.55);
+}
+.dm-onb-combo__cards .hn-pcard:first-child {
+  margin-left: 0;
+}
+.dm-onb-combo__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+.dm-onb-combo__d {
+  text-align: left;
+}
+
+/* keep the drawer close button clear of the TG island/controls */
+.tg-fullscreen .hn-drawer__close {
+  top: calc(var(--dm-island) + 6px);
+}
