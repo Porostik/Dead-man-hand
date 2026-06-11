@@ -2405,3 +2405,35 @@ body {
   border-radius: 12px;
   font-size: 16px;
 }
+
+/* cash-out fills the bottom block so it never feels empty */
+.dm-cashrow {
+  min-height: 160px;
+  align-items: stretch;
+}
+.dm-cashrow .dm-cashcell {
+  flex: 1;
+}
+.dm-cashout--multi {
+  flex: 1 1 auto;
+  min-height: 104px;
+}
+.dm-cashout--multi .dm-cashout__amt {
+  font-size: 20px;
+}
+.dm-cashout--multi .dm-cashout__top {
+  font-size: 12px;
+}
+.dm-half {
+  flex: 0 0 48px;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.dm-cashdone {
+  flex: 1;
+  justify-content: center;
+}
+.dm-cashbar--idle {
+  min-height: 120px;
+}
