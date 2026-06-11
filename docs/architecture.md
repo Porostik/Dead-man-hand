@@ -8,6 +8,8 @@ dmh/
 │  ├─ engine/     @dmh/engine — pure TS game core (RGS). Zero runtime deps.
 │  ├─ ui/         @dmh/ui — High Noon design system (React + Vite lib).
 │  └─ frontend/   React + Vite TG Mini App. Engine client-side, composes @dmh/ui.
+│                 Routes: / (game), /kit (DS showcase), /lab (economics inspector).
+├─ tools/         gen-images.mjs (art) · simulate.mjs (Monte-Carlo economics).
 ├─ docs/          design · decisions · roadmap
 └─ .claude/skills/  engine-dev · game-balance
 ```

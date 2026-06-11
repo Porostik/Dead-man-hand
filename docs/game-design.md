@@ -24,19 +24,21 @@ testers voluntarily replay ("one more round?"), measured by behavior.
 ## Round suit
 
 Each round has a **round suit**. Cards of that suit add **+0.3** on top of their
-rank weight (shown as a quiet gold edge on the card, not a combo glow), and they
-feed the flush combo below.
+rank weight (a quiet gold edge on the card, not a combo glow). It's a separate
+mechanic from the flush combo below (which is about suits in a row, any suit).
 
 ## Combos (dopamine layer) — poker-lite, self-announcing
 
 Combos jump the multiplier and pop a badge — no chart to memorize, each announces
-itself:
+itself. Every combo except the jackpot is a visible RUN of adjacent cards (you see
+why it fired); one badge per card, best combo wins (a straight-flush awards the
+straight):
 
 - **Пара** — two of the same rank in a row.
 - **Сет** — three of the same rank in a row.
 - **Стрит** — three consecutive ranks in a row.
-- **Флеш масти** — three round-suit cards in the round.
-- **☠ Dead Man's Hand** — aces & eights (rare jackpot).
+- **Флеш** — three of the same suit in a row (any suit).
+- **☠ Dead Man's Hand** — two aces & two eights (rare jackpot).
 
 These drive **near-misses** ("two kings… chasing the third"), which retain harder
 than wins. Near-misses must be **honest** — they arise from the real draw, never
@@ -56,6 +58,19 @@ Players should _feel_ they found a pattern, but it must stay an illusion: **no c
 out target may return >100% RTP**; the RTP curve across targets must be flat.
 **Combos are the usual culprit** for an exploitable >100% sweet spot — verify with
 simulation (Phase 1) before real money.
+
+## How RTP gets controlled (crash-point model)
+
+Today the shipped game runs the **feel model** (escalating-hazard death; cards
+drive the multiplier; RTP is _not_ controlled — fine for the fake-coin MVP). For
+real money the engine already has a **crash-point model** behind
+`GameConfig.economics`: `rollCrashPoint` rolls the round's crash multiplier from a
+house-edge distribution `M = (1 − e)/(1 − U)`, so `P(reach x) = (1 − e)/x` and
+**every cash-out target returns the same `(1 − e)`** — a flat, un-exploitable RTP,
+with combos as pure decoration (they can't move the edge). Payouts are bounded by
+`maxWinCap`. Tune/verify it in the **`/lab`** route and the Monte-Carlo simulator
+**`tools/simulate.mjs`** (RTP curve · profit · bankroll · risk of ruin). Edge vs
+pool/parimutuel trade-offs: `docs/decisions.md`.
 
 ## Balance config
 

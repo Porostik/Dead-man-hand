@@ -17,10 +17,14 @@ In scope:
 Out of scope: real money, crypto, provably-fair, RTP math, simulation, bankroll,
 backend, sockets, licensing.
 
-**Done so far:** engine reworked to the agreed mechanics; game screen + onboarding
-built from the design handoff (composing `@dmh/ui`); TMA integration
-(`@telegram-apps/sdk` + local mock, fullscreen + safe-area); deployed free on
-Vercel — live at https://dmh-two.vercel.app.
+**Done so far:** engine reworked to the agreed mechanics (combos = runs of adjacent
+cards, flush = 3 same-suit-in-a-row); game + onboarding built (composing `@dmh/ui`)
+with **two bet slots + partial cash-out** and combo FX; **settings** drawer
+(sound/vibration + rules); TMA (`@telegram-apps/sdk` + local mock, fullscreen +
+safe-area); deployed free on Vercel — https://dmh-two.vercel.app. Plus a **head
+start on Phase 1**: the crash-point economics primitive (`rollCrashPoint`, behind
+`GameConfig.economics`) + a `/lab` inspector + a Monte-Carlo `tools/simulate.mjs`
+are built and tested (not yet switched on in the game).
 
 **Immediate next steps:**
 
@@ -35,10 +39,14 @@ If it's not fun, stop/redesign — no math saves a boring loop.
 
 **Goal:** prove unit economics are safe and exploit-free, on paper.
 
-- Monte-Carlo over `GameConfig`: RTP (overall + per-cash-out-target curve),
-  variance, **risk of ruin** vs (max-win-cap / bankroll).
-- Tune to a flat RTP curve at target (~96%), no >100% sweet spots (watch combos).
-  Decide max-win-cap and bankroll sizing.
+The model + tooling already exist (see Phase 0 head start): `rollCrashPoint` gives
+a flat RTP `(1−e)` by construction. Phase 1 is to **wire it into the game**
+(set `GameConfig.economics`), **re-tune the card weights** so the multiplier path
+rises to the crash cleanly (no empty rounds), then validate:
+
+- Monte-Carlo (`tools/simulate.mjs`): RTP curve per cash-out target, variance,
+  **risk of ruin** vs (max-win-cap / bankroll). Confirm flat ≤ target, no sweet spot.
+- Decide `houseEdge` (market norm 1–3%), `maxWinCap`, and bankroll sizing.
 
 **Gate → Phase 2:** flat RTP ≤ target, no exploitable strategy, acceptable ruin risk.
 

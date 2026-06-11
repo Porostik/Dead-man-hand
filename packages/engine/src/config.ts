@@ -23,8 +23,8 @@ export const DEFAULT_CONFIG: GameConfig = {
   suitBonus: 0.3,
   combo: {
     setLen: 3, // three of a kind in a row = set; two in a row = pair
-    straightLen: 3, // three consecutive ranks
-    flushCount: 3, // three round-suit cards this round
+    straightLen: 3, // three consecutive ranks in a row
+    flushCount: 3, // three of the same suit in a row (any suit)
     bonus: { pair: 1.25, set: 1.7, straight: 1.8, flush: 1.6, deadmans: 5.0 },
   },
   // The longer a round runs, the likelier the dead card — a tension ramp.

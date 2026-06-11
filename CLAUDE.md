@@ -25,28 +25,30 @@ The MVP runs the engine **client-side** in the frontend. No backend needed.
 ## Current status (update me as things change)
 
 - ✅ Nx monorepo (pnpm), TS everywhere, `moduleResolution: bundler` (no `.js` in imports).
-- ✅ `@dmh/engine` — reworked to the agreed mechanics: additive `X += weight`,
-  **round-suit +0.3**, suited poker-lite combos (Пара/Сет/Стрит/Флеш/☠ Dead Man's
-  Hand), escalating-hazard death. `createRound(config, rng)` predetermines the whole
-  round (provably-fair-ready). Tested.
-- ✅ `frontend` — React+Vite, engine via Zustand store + `useGameLoop` (auto-deal
-  pacing). TanStack Router/Query set up.
+- ✅ `@dmh/engine` — agreed mechanics: additive `X += weight`, **round-suit +0.3**,
+  poker-lite combos that are runs of adjacent cards (Пара/Сет/Стрит/**Флеш = 3 одной
+  масти подряд**/☠ Dead Man's Hand), best-combo-wins priority, escalating-hazard
+  death. `createRound(config, rng)` predetermines the round (provably-fair-ready). Tested.
+- ✅ **Crash-point economics built** (Phase-1 math, behind `GameConfig.economics`):
+  `rollCrashPoint` → flat RTP `(1−e)` at every cash-out target, `maxWinCap` exposure.
+  **NOT switched on in the game** (the live game runs the feel model — uncontrolled
+  RTP, fine for fake coins). Explore via **`/lab`** + Monte-Carlo **`tools/simulate.mjs`**.
+- ✅ `frontend` — React+Vite, engine via Zustand + `useGameLoop` (auto-deal). TanStack.
 - ✅ Backend removed (was a stub). Re-add in Phase 2: `pnpm nx g @nx/nest:app ...`.
-- ✅ **Design handoff received** (HTML/CSS from Claude Design, NOT Figma) — saved to
-  `docs/design/handoff/`: the **High Noon** design system + the "Dead Men — Card
-  Crash" prototype + screenshots + chat transcripts (design intent).
-- ✅ `@dmh/ui` — full port of the High Noon DS (tokens, `hn-*` components, western
-  icon set). Showcase at the `/kit` route. `import '@dmh/ui/styles.css'` once.
-- ✅ **Game screen + onboarding built** from the handoff, composing `@dmh/ui`. The
-  game-specific "dead-men" skin (`dm-*`) lives in the frontend, not the DS.
-- ✅ **TMA integration** (`@telegram-apps/sdk` + a local mock so `pnpm dev` runs in a
-  plain browser): **fullscreen + safe-area**; the game name sits in the TG controls
-  strip. Adapter in `frontend/src/lib/telegram.ts`.
-- ✅ **Deployed free on Vercel** — live at https://dmh-two.vercel.app
-  (`npx vercel --prod --archive=tgz`; SPA config in `vercel.json`).
-- 🚧 **Art assets** — `tools/gen-images.mjs` (fal.ai or a free provider) is ready;
-  blocked on credits / a free token. (Mascot deferred — see auto-memory.)
-- ⬜ Playtest with friends; watch replay behavior. Then Phase 1 (RTP math).
+- ✅ **Design handoff** (HTML/CSS from Claude Design, NOT Figma) in `docs/design/handoff/`
+  (High Noon DS + "Dead Men — Card Crash" prototype + screenshots + chats).
+- ✅ `@dmh/ui` — High Noon DS (tokens, `hn-*` components, icons). `/kit` showcase.
+  `import '@dmh/ui/styles.css'` once. (Drawer has `side` top/bottom + `full`.)
+- ✅ **Game + onboarding built** (skin `dm-*` in the frontend). **Two bet slots +
+  partial cash-out (½)**, per-slot auto-cashout; SVG combo flame + embers.
+- ✅ **Settings** — header gear → top drawer (sound/vibration, swipe-/×-close); a
+  "rules" drawer shows the onboarding. Persisted; vibration wired to haptics.
+- ✅ **TMA** (`@telegram-apps/sdk` + local mock so `pnpm dev` runs in a browser):
+  fullscreen + safe-area; name in the TG controls strip. `frontend/src/lib/telegram.ts`.
+- ✅ **Deployed free on Vercel** — https://dmh-two.vercel.app (`vercel --prod --archive=tgz`).
+- 🚧 **Art assets** — `tools/gen-images.mjs` ready; blocked on an image provider (credits/token).
+- ⬜ Playtest with friends. Phase 1: wire crash-edge into the game + re-tune card
+  weights (verify in the simulator/lab).
 
 ## Stack & layout
 
