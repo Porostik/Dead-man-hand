@@ -217,21 +217,93 @@ function LaidCard({
   );
 }
 
-/** Vector flame licking up from behind the card's top edge (combo highlight). */
-function CardFlame() {
+/**
+ * Juicy fire behind the card's top edge: a full ridge of tongues that MORPHS
+ * between two poses (SMIL `d` — vector-crisp, no CSS scale → no pixelation), a
+ * brighter inner ridge on an offset beat, and a few rising ember sparks.
+ */
+// one central flame tongue that FORKS at the tip; 4 poses so the fork dances
+// side to side (reads as burning, not a vertical pulse)
+const RIDGE_1 =
+  'M12 60 C 8 41 22 25 34 13 C 40 21 46 26 50 28 C 55 24 60 24 64 22 C 76 31 92 45 88 60 Z';
+const RIDGE_2 =
+  'M12 60 C 9 42 22 28 35 20 C 40 25 46 27 50 26 C 56 22 61 19 66 15 C 78 30 92 44 88 60 Z';
+const RIDGE_3 =
+  'M12 60 C 9 42 22 27 35 21 C 40 26 46 28 50 27 C 56 23 62 17 66 12 C 78 29 92 44 88 60 Z';
+const RIDGE_4 =
+  'M12 60 C 9 43 22 29 35 18 C 40 24 46 27 51 25 C 57 23 62 21 66 19 C 78 31 92 45 88 60 Z';
+// brighter inner core (smaller central tongue), its own beat
+const CORE_1 = 'M22 60 C 19 45 36 32 49 24 C 62 33 80 46 78 60 Z';
+const CORE_2 = 'M22 60 C 19 47 36 36 49 29 C 62 35 80 47 78 60 Z';
+const CORE_3 = 'M22 60 C 19 44 36 33 50 25 C 64 34 80 46 78 60 Z';
+
+const EMBERS = [
+  { cx: 20, r: 1.7, dur: 1.2, delay: 0 },
+  { cx: 40, r: 1.2, dur: 1.6, delay: 0.5 },
+  { cx: 58, r: 1.9, dur: 1.1, delay: 0.25 },
+  { cx: 74, r: 1.3, dur: 1.5, delay: 0.8 },
+  { cx: 88, r: 1.1, dur: 1.3, delay: 1.0 },
+];
+
+function morphAnim(poses: string[], dur: number) {
+  const loop = [...poses, poses[0]]; // return to the first pose → seamless loop
+  const keyTimes = loop.map((_, i) => (i / (loop.length - 1)).toFixed(3)).join(';');
+  const keySplines = loop
+    .slice(1)
+    .map(() => '0.45 0 0.55 1')
+    .join(';');
+  return (
+    <animate
+      attributeName="d"
+      dur={`${dur}s`}
+      repeatCount="indefinite"
+      calcMode="spline"
+      keyTimes={keyTimes}
+      keySplines={keySplines}
+      values={loop.join(';')}
+    />
+  );
+}
+
+export function CardFlame() {
   return (
     <div className="dm-flame" aria-hidden="true">
       <svg viewBox="0 0 100 60" preserveAspectRatio="none">
         <linearGradient id="dmFlameG" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stopColor="#d8330a" />
-          <stop offset="0.4" stopColor="#ff6a14" />
-          <stop offset="0.75" stopColor="#ffb13a" />
-          <stop offset="1" stopColor="#ffe58a" />
+          <stop offset="0" stopColor="#c01a04" />
+          <stop offset="0.35" stopColor="#ff5414" />
+          <stop offset="0.72" stopColor="#ffad38" />
+          <stop offset="1" stopColor="#fff0b8" />
         </linearGradient>
-        <path
-          fill="url(#dmFlameG)"
-          d="M6 60 C 0 42 12 40 16 26 C 18 18 22 16 24 22 C 26 28 28 30 30 28 C 34 40 34 50 34 60 Z M34 60 C 32 38 46 34 50 16 C 54 32 60 34 60 44 C 64 36 68 36 70 30 C 74 44 70 52 64 60 Z M62 60 C 62 44 72 42 78 30 C 80 38 84 38 86 36 C 90 48 94 50 94 60 Z"
-        />
+        <linearGradient id="dmFlameCore" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stopColor="#ff7a1e" />
+          <stop offset="0.6" stopColor="#ffcf66" />
+          <stop offset="1" stopColor="#fffae8" />
+        </linearGradient>
+        <path fill="url(#dmFlameG)">
+          {morphAnim([RIDGE_1, RIDGE_2, RIDGE_3, RIDGE_4], 1.1)}
+        </path>
+        <path fill="url(#dmFlameCore)" opacity="0.92">
+          {morphAnim([CORE_1, CORE_2, CORE_3], 0.8)}
+        </path>
+        {EMBERS.map((e, i) => (
+          <circle key={i} cx={e.cx} cy="48" r={e.r} fill="#ffd98a" opacity="0">
+            <animate
+              attributeName="cy"
+              values="48;2"
+              dur={`${e.dur}s`}
+              begin={`${e.delay}s`}
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;1;0"
+              dur={`${e.dur}s`}
+              begin={`${e.delay}s`}
+              repeatCount="indefinite"
+            />
+          </circle>
+        ))}
       </svg>
     </div>
   );

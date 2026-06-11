@@ -2814,9 +2814,9 @@ body {
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 75%;
-  width: 130%;
-  height: 66%;
+  bottom: 70%;
+  width: 122%;
+  height: 80%;
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -2824,24 +2824,5 @@ body {
   display: block;
   width: 100%;
   height: 100%;
-  transform-origin: 50% 100%;
-  filter: blur(0.5px) drop-shadow(0 0 6px rgba(255, 120, 40, 0.6));
-  animation: dm-flame-svg 1s ease-in-out infinite;
-}
-@keyframes dm-flame-svg {
-  0% {
-    transform: scaleY(1) scaleX(1);
-  }
-  25% {
-    transform: scaleY(1.16) scaleX(0.95);
-  }
-  50% {
-    transform: scaleY(0.92) scaleX(1.05);
-  }
-  75% {
-    transform: scaleY(1.12) scaleX(0.97);
-  }
-  100% {
-    transform: scaleY(1) scaleX(1);
-  }
+  filter: blur(0.4px) drop-shadow(0 0 7px rgba(255, 110, 30, 0.7));
 }

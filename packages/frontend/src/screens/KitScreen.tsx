@@ -33,6 +33,7 @@ import {
   Tabs,
   BottomNav,
 } from '@dmh/ui';
+import { CardFlame } from '../components/game/board';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -268,6 +269,27 @@ export function KitScreen() {
             <PlayingCard rank="K" suit="spade" size="md" />
             <PlayingCard rank="K" suit="spade" size="lg" />
           </div>
+          <Cell cap="Combo flame (debug)">
+            <div
+              className="dm-table--row"
+              style={{ display: 'flex', gap: 28, paddingTop: 22 }}
+            >
+              {(
+                [
+                  { rank: 'K', suit: 'spade' },
+                  { rank: 'K', suit: 'heart' },
+                  { rank: 'A', suit: 'club' },
+                ] as Array<{ rank: Rank; suit: Suit }>
+              ).map((c, i) => (
+                <div className="dm-card-wrap is-combo-hit" key={i}>
+                  <CardFlame />
+                  <div className="dm-card-fly">
+                    <PlayingCard rank={c.rank} suit={c.suit} size="sm" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Cell>
           <div className="kit-row">
             <Cell cap="Chips">
               <div className="kit-row">
