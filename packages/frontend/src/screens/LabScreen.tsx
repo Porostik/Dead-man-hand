@@ -27,9 +27,19 @@ const BUCKETS: [string, number, number][] = [
   ['10+', 10, Infinity],
 ];
 
-function makeConfig(edge: number, cap: number, minCrash: number): GameConfig {
+function makeConfig(
+  edge: number,
+  cap: number,
+  minCrash: number,
+  weightScale: number,
+): GameConfig {
+  const rankWeights = Object.fromEntries(
+    Object.entries(DEFAULT_CONFIG.rankWeights).map(([k, v]) => [k, v * weightScale]),
+  ) as GameConfig['rankWeights'];
   return {
     ...DEFAULT_CONFIG,
+    rankWeights,
+    suitBonus: DEFAULT_CONFIG.suitBonus * weightScale,
     economics: { houseEdge: edge, maxWinCap: cap, minCrash },
   };
 }
@@ -59,12 +69,13 @@ export function LabScreen() {
   const [cap, setCap] = useState(25);
   const [noInstant, setNoInstant] = useState(false);
   const [floor, setFloor] = useState(1.1);
+  const [wscale, setWscale] = useState(1);
   const [seed, setSeed] = useState(12345);
   const [count, setCount] = useState(16);
 
   const config = useMemo(
-    () => makeConfig(edge, cap, noInstant ? floor : 1),
-    [edge, cap, noInstant, floor],
+    () => makeConfig(edge, cap, noInstant ? floor : 1, wscale),
+    [edge, cap, noInstant, floor, wscale],
   );
 
   const shown = useMemo(
@@ -95,7 +106,7 @@ export function LabScreen() {
   }, [config, seed]);
 
   const w = (c: DealtCard) =>
-    DEFAULT_CONFIG.rankWeights[c.rank] + (c.bonus ? DEFAULT_CONFIG.suitBonus : 0);
+    config.rankWeights[c.rank] + (c.bonus ? config.suitBonus : 0);
 
   return (
     <div className="lab">
@@ -130,6 +141,17 @@ export function LabScreen() {
             min={2}
             value={cap}
             onChange={(e) => setCap(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          вес ×
+          <input
+            type="number"
+            step={0.05}
+            min={0.05}
+            max={2}
+            value={wscale}
+            onChange={(e) => setWscale(Math.max(0.05, Number(e.target.value)))}
           />
         </label>
         <label className="chk">
