@@ -41,13 +41,15 @@ export function useGameLoop(): void {
     return undefined;
   }, [phase, roundId, start, deal, nextRound]);
 
-  // auto-cashout
+  // auto-cashout — each slot independently at its own target
   useEffect(() => {
-    const { phase: p, bet, autoEnabled, autoTarget, multiplier, cashout } =
-      useGameStore.getState();
-    if (p === 'running' && bet?.active && autoEnabled && multiplier >= autoTarget) {
-      cashout(true);
-    }
+    const st = useGameStore.getState();
+    if (st.phase !== 'running') return;
+    st.slots.forEach((sl, i) => {
+      if (sl.bet?.active && sl.autoEnabled && st.multiplier >= sl.autoTarget) {
+        st.cashout(i, 1, true);
+      }
+    });
   }, [dealtCount]);
 
   // combo haptics — fire as a combo card lands

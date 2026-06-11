@@ -2233,3 +2233,118 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
+/* ===================================================================
+   MULTI-BET (2 slots) + PARTIAL CASH-OUT + compacted chrome
+   =================================================================== */
+/* compact header — make room for two bet slots */
+.dm-app--live .dm-header {
+  padding: 10px 14px 6px;
+}
+
+/* pre-round: two stacked slot cards */
+.dm-betpanel--multi {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 12px 12px;
+}
+.dm-slot {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surf2);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dm-slot.is-placed {
+  border-color: var(--ember);
+  box-shadow: inset 0 0 0 1px rgba(255, 176, 102, 0.25);
+}
+.dm-slot__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dm-slot__field {
+  flex: 1;
+  min-width: 0;
+}
+.dm-slot__row .hn-btn {
+  white-space: nowrap;
+  border-radius: 999px;
+}
+.dm-slot__auto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* in-round: one cash-out control per slot, side by side */
+.dm-cashrow {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+.dm-cashcell {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  min-width: 0;
+}
+.dm-cashcell.is-empty {
+  visibility: hidden;
+}
+.dm-cashout--multi {
+  flex: 1;
+  min-width: 0;
+  min-height: 62px;
+  border-radius: 14px;
+  padding: 8px 6px;
+}
+.dm-cashout--multi .dm-cashout__top {
+  font-size: 11px;
+}
+.dm-cashout--multi .dm-cashout__amt {
+  font-size: 17px;
+}
+.dm-cashout--multi .dm-cashout__x {
+  font-size: 12px;
+}
+.dm-half {
+  flex: 0 0 42px;
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: var(--surf2);
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.dm-half:active {
+  transform: scale(0.94);
+}
+.dm-cashdone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surf2);
+  padding: 8px;
+}
+.dm-cashdone__x {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+.dm-cashdone__amt {
+  color: #7fc8a0;
+  font-size: 13px;
+}

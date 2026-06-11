@@ -16,7 +16,6 @@ import {
   ShuffleTimer,
 } from '../components/game/board';
 import { BetPanel, CashOutBar } from '../components/game/bet';
-import { LiveWinsTicker } from '../components/game/ticker';
 
 const SHUFFLE_SECS = 5;
 
@@ -48,9 +47,9 @@ export function GameScreen() {
   const dealtCount = useGameStore((s) => s.dealtCount);
   const multiplier = useGameStore((s) => s.multiplier);
   const lastCard = useGameStore((s) => s.lastCard);
-  const bet = useGameStore((s) => s.bet);
+  const slots = useGameStore((s) => s.slots);
+  const winFlash = useGameStore((s) => s.winFlash);
   const lastResult = useGameStore((s) => s.lastResult);
-  const lastWin = useGameStore((s) => s.lastWin);
   const lastLost = useGameStore((s) => s.lastLost);
   const history = useGameStore((s) => s.history);
   const flash = useGameStore((s) => s.flash);
@@ -60,7 +59,7 @@ export function GameScreen() {
   const shuffling = phase === 'shuffling';
   const lowBalance = balance < 0.5;
   const cards = round.sequence.slice(0, dealtCount);
-  const justCashed = !!(bet && !bet.active && bet.cashedAt != null && !busted);
+  const bankedTotal = slots.reduce((s, sl) => s + (sl.bet?.banked ?? 0), 0);
 
   const heatTier = busted
     ? 0
@@ -80,6 +79,17 @@ export function GameScreen() {
     const t = setTimeout(() => setShake(false), 620);
     return () => clearTimeout(t);
   }, [flash]);
+
+  // win flash — pops on each cash-out (bumped via the winFlash counter)
+  const [win, setWin] = useState<{ amt: number; x: number } | null>(null);
+  useEffect(() => {
+    if (winFlash === 0) return;
+    const st = useGameStore.getState();
+    if (st.phase === 'bust') return;
+    setWin({ amt: st.lastWin, x: st.multiplier });
+    const t = setTimeout(() => setWin(null), 1600);
+    return () => clearTimeout(t);
+  }, [winFlash]);
 
   // combo: highlight the contributing cards (~2s) + a little screen nudge.
   // The clear timer lives in a ref so it survives subsequent (non-combo) deals
@@ -153,7 +163,6 @@ export function GameScreen() {
         </button>
       </header>
 
-      <LiveWinsTicker />
       <HistoryBar history={history} />
 
       {/* board */}
@@ -202,26 +211,24 @@ export function GameScreen() {
             <div className="dm-bust__banner">
               <div className="dm-bust__word">BUST</div>
               <div className="dm-bust__final">{fmtX(multiplier)}</div>
-              {(lastResult === 'bust' || lastResult === 'cashed') && (
+              {(lastResult === 'bust' || lastResult === 'safe') && (
                 <div
                   className={`dm-bust__sub${lastResult === 'bust' ? ' is-bad' : ' is-good'}`}
                 >
                   {lastResult === 'bust'
                     ? `− ◎ ${fmtCoin(lastLost)} сгорело`
-                    : `ты успел выйти · + ◎ ${fmtCoin(lastWin)}`}
+                    : `ты успел выйти · + ◎ ${fmtCoin(bankedTotal)}`}
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {justCashed && (
-          <div className="dm-winflash">
+        {win && !busted && (
+          <div className="dm-winflash" key={winFlash}>
             <div className="dm-wincard">
-              <div className="dm-wincard__amt">+◎ {fmtCoin(lastWin)}</div>
-              <div className="dm-wincard__x">
-                {fmtX(bet?.cashedAt ?? multiplier)} · ЗАБРАНО
-              </div>
+              <div className="dm-wincard__amt">+◎ {fmtCoin(win.amt)}</div>
+              <div className="dm-wincard__x">{fmtX(win.x)} · ЗАБРАНО</div>
             </div>
           </div>
         )}

@@ -65,7 +65,7 @@ function rtpAt(rounds: Round[], t: number): number {
 }
 
 export function LabScreen() {
-  const [edge, setEdge] = useState(0.05);
+  const [edge, setEdge] = useState(0.03);
   const [cap, setCap] = useState(25);
   const [noInstant, setNoInstant] = useState(false);
   const [floor, setFloor] = useState(1.1);
