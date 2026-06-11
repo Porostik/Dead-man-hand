@@ -89,5 +89,12 @@ export interface GameConfig {
     houseEdge: number;
     /** Max-win cap (multiplier) — bounds the worst single-round payout. */
     maxWinCap: number;
+    /**
+     * Minimum crash multiplier (default 1 = classic). With 1, ~`houseEdge` of
+     * rounds crash below 1 (instant bust) and the RTP is flat. Raising it above 1
+     * removes instant busts but lets the RTP exceed 100% for targets below the
+     * floor (an exploit zone) — a tunable feel-vs-edge trade-off.
+     */
+    minCrash?: number;
   };
 }

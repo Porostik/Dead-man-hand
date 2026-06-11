@@ -89,12 +89,13 @@ function detectCombo(
  * edge / cap / bankroll before any real-money launch.
  */
 export function rollCrashPoint(
-  economics: { houseEdge: number; maxWinCap: number },
+  economics: { houseEdge: number; maxWinCap: number; minCrash?: number },
   rng: Rng,
 ): number {
-  const raw = (1 - economics.houseEdge) / (1 - rng());
-  if (raw < 1) return 1; // instant bust — any cash-out target > 1 loses
-  return Math.min(r2(raw), economics.maxWinCap);
+  const minCrash = economics.minCrash ?? 1;
+  const m = Math.max(minCrash, (1 - economics.houseEdge) / (1 - rng()));
+  if (m <= 1) return 1; // instant bust — only possible when minCrash ≤ 1
+  return Math.min(r2(m), economics.maxWinCap);
 }
 
 /** How many safe cards land before the dead card (escalating hazard). */

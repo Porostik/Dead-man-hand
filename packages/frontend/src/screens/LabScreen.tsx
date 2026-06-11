@@ -17,8 +17,6 @@ import { SUIT_GLYPH, SUIT_RED, COMBO_LABEL } from '../components/game/util';
  * (house-edge) model side by side. Not part of the player flow.
  */
 
-type Mode = 'feel' | 'crash';
-
 const TARGETS = [1.2, 1.5, 2, 3, 5];
 const BUCKETS: [string, number, number][] = [
   ['<1.5', 0, 1.5],
@@ -29,10 +27,11 @@ const BUCKETS: [string, number, number][] = [
   ['10+', 10, Infinity],
 ];
 
-function makeConfig(mode: Mode, edge: number, cap: number): GameConfig {
-  return mode === 'crash'
-    ? { ...DEFAULT_CONFIG, economics: { houseEdge: edge, maxWinCap: cap } }
-    : DEFAULT_CONFIG;
+function makeConfig(edge: number, cap: number, minCrash: number): GameConfig {
+  return {
+    ...DEFAULT_CONFIG,
+    economics: { houseEdge: edge, maxWinCap: cap, minCrash },
+  };
 }
 
 function genRounds(config: GameConfig, seed: number, count: number): Round[] {
@@ -56,13 +55,17 @@ function rtpAt(rounds: Round[], t: number): number {
 }
 
 export function LabScreen() {
-  const [mode, setMode] = useState<Mode>('crash');
   const [edge, setEdge] = useState(0.05);
   const [cap, setCap] = useState(25);
+  const [noInstant, setNoInstant] = useState(false);
+  const [floor, setFloor] = useState(1.1);
   const [seed, setSeed] = useState(12345);
   const [count, setCount] = useState(16);
 
-  const config = useMemo(() => makeConfig(mode, edge, cap), [mode, edge, cap]);
+  const config = useMemo(
+    () => makeConfig(edge, cap, noInstant ? floor : 1),
+    [edge, cap, noInstant, floor],
+  );
 
   const shown = useMemo(
     () => genRounds(config, seed, count),
@@ -76,8 +79,10 @@ export function LabScreen() {
     const cards = rounds.reduce((s, r) => s + r.sequence.length, 0) / N;
     const combo = { pair: 0, set: 0, straight: 0, flush: 0, deadmans: 0 };
     let withCombo = 0;
+    let insta = 0;
     const dist = BUCKETS.map(() => 0);
     for (const r of rounds) {
+      if (!r.sequence.length) insta += 1; // 0 safe cards = instant bust
       const kinds = new Set(r.sequence.map((c) => c.combo).filter(Boolean));
       if (kinds.size) withCombo += 1;
       for (const k of kinds) combo[k as keyof typeof combo] += 1;
@@ -86,7 +91,7 @@ export function LabScreen() {
       if (bi >= 0) dist[bi] += 1;
     }
     const rtp = TARGETS.map((t) => [t, rtpAt(rounds, t)] as const);
-    return { N, cards, combo, withCombo, dist, rtp };
+    return { N, cards, combo, withCombo, dist, rtp, insta: insta / N };
   }, [config, seed]);
 
   const w = (c: DealtCard) =>
@@ -106,38 +111,47 @@ export function LabScreen() {
 
       {/* controls */}
       <div className="lab-controls">
-        <div className="seg">
-          <button className={mode === 'feel' ? 'on' : ''} onClick={() => setMode('feel')}>
-            feel (Phase 0)
-          </button>
-          <button className={mode === 'crash' ? 'on' : ''} onClick={() => setMode('crash')}>
-            crash (Phase 1)
-          </button>
-        </div>
-        {mode === 'crash' && (
-          <>
-            <label>
-              edge
-              <input
-                type="number"
-                step={0.01}
-                min={0}
-                max={0.3}
-                value={edge}
-                onChange={(e) => setEdge(Number(e.target.value))}
-              />
-            </label>
-            <label>
-              cap ×
-              <input
-                type="number"
-                step={1}
-                min={2}
-                value={cap}
-                onChange={(e) => setCap(Number(e.target.value))}
-              />
-            </label>
-          </>
+        <label>
+          edge
+          <input
+            type="number"
+            step={0.01}
+            min={0}
+            max={0.3}
+            value={edge}
+            onChange={(e) => setEdge(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          cap ×
+          <input
+            type="number"
+            step={1}
+            min={2}
+            value={cap}
+            onChange={(e) => setCap(Number(e.target.value))}
+          />
+        </label>
+        <label className="chk">
+          <input
+            type="checkbox"
+            checked={noInstant}
+            onChange={(e) => setNoInstant(e.target.checked)}
+          />
+          без мгнов. бустов
+        </label>
+        {noInstant && (
+          <label>
+            floor ×
+            <input
+              type="number"
+              step={0.05}
+              min={1}
+              max={2}
+              value={floor}
+              onChange={(e) => setFloor(Number(e.target.value))}
+            />
+          </label>
         )}
         <label>
           rounds
@@ -165,7 +179,9 @@ export function LabScreen() {
         <div className="stat">
           <div className="stat__h">avg cards / round</div>
           <div className="stat__v">{stats.cards.toFixed(1)}</div>
-          <div className="stat__sub">over {stats.N.toLocaleString()} rounds</div>
+          <div className="stat__sub">
+            мгнов. бустов: {(stats.insta * 100).toFixed(1)}% · {stats.N.toLocaleString()} раундов
+          </div>
         </div>
 
         <div className="stat">
@@ -205,9 +221,7 @@ export function LabScreen() {
         </div>
 
         <div className="stat">
-          <div className="stat__h">
-            RTP по таргету{mode === 'crash' ? ` (цель ~${((1 - edge) * 100).toFixed(0)}%)` : ''}
-          </div>
+          <div className="stat__h">RTP по таргету (цель ~{((1 - edge) * 100).toFixed(0)}%)</div>
           <table className="mini">
             <tbody>
               {stats.rtp.map(([t, v]) => (
@@ -218,11 +232,7 @@ export function LabScreen() {
               ))}
             </tbody>
           </table>
-          <div className="stat__sub">
-            {mode === 'crash'
-              ? 'должно быть плоско и ≤100%'
-              : 'feel-модель: RTP не контролируется'}
-          </div>
+          <div className="stat__sub">плоско и ≤100% = честно · красное = дыра</div>
         </div>
       </div>
 
@@ -276,6 +286,8 @@ const LAB_CSS = `
 .lab-head nav a{color:#ffb066;margin-right:12px;text-decoration:none}
 .lab-controls{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:12px;border:1px solid #3a2c1f;border-radius:10px;background:#1c140d;margin-bottom:14px}
 .lab-controls label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:#a3917a;text-transform:uppercase;letter-spacing:.5px}
+.lab-controls label.chk{flex-direction:row;align-items:center;gap:6px;text-transform:none;color:#efe2cc;cursor:pointer}
+.lab-controls label.chk input{width:auto}
 .lab-controls input{width:90px;background:#0f0a06;border:1px solid #3a2c1f;color:#efe2cc;border-radius:6px;padding:5px 7px;font:inherit}
 .lab-controls button{background:#2a1f14;border:1px solid #3a2c1f;color:#efe2cc;border-radius:6px;padding:6px 10px;cursor:pointer;font:inherit}
 .seg{display:flex}.seg button{border-radius:0}.seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0;border-left:0}
