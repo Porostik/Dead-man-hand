@@ -2186,19 +2186,36 @@ body {
   );
 }
 
-/* TG fullscreen only: lift the game name up into the top safe-area strip (the
-   row with the native TG buttons), centered between them on a single line. The
-   header below then holds just the balance (left) + chat (right). In a normal
-   browser there's no .tg-fullscreen class, so the header stays as-is. */
+/* ---------------------------------------------------------------------------
+   TG FULLSCREEN ONLY (.tg-fullscreen on <html>, set when fullscreen is active).
+   Lift the game name into the top controls row (below the Dynamic Island), and
+   make the header below a simple space-between (balance left, chat right).
+   Floor values guarantee we clear the island/controls even if the TG viewport
+   vars report 0 on a given client. A plain browser has no .tg-fullscreen class,
+   so the header stays exactly as before.
+   --------------------------------------------------------------------------- */
 .dm-app--live {
   position: relative; /* containing block for the title strip */
 }
+.tg-fullscreen {
+  --dm-island: max(
+    var(--tg-viewport-safe-area-inset-top, 0px),
+    env(safe-area-inset-top, 0px),
+    54px
+  );
+  --dm-controls: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 30px);
+}
+/* push all app content below the island + TG controls */
+.tg-fullscreen .dm-app--live {
+  padding-top: calc(var(--dm-island) + var(--dm-controls));
+}
+/* game name: centered single line in the controls row, between the TG buttons */
 .tg-fullscreen .dm-wordmark {
   position: absolute;
-  top: var(--tg-viewport-safe-area-inset-top, 0px);
+  top: var(--dm-island);
   left: 0;
   right: 0;
-  height: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 30px);
+  height: var(--dm-controls);
   flex-direction: row;
   gap: 6px;
   justify-content: center;
@@ -2209,4 +2226,10 @@ body {
 .tg-fullscreen .dm-wordmark__main {
   font-size: 15px;
   letter-spacing: 0.5px;
+}
+/* main header: balance left, chat right */
+.tg-fullscreen .dm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
