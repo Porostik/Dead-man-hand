@@ -208,10 +208,31 @@ function LaidCard({
       }${busted ? ' is-scatter' : ''}`}
       style={scatterStyle}
     >
+      {highlighted && <CardFlame />}
       <div className="dm-card-fly" ref={flyRef}>
         <PlayingCard rank={card.rank} suit={card.suit} size="sm" />
       </div>
       {card.bonus && <span className="dm-bonus-tag">+0.3</span>}
+    </div>
+  );
+}
+
+/** Vector flame licking up from behind the card's top edge (combo highlight). */
+function CardFlame() {
+  return (
+    <div className="dm-flame" aria-hidden="true">
+      <svg viewBox="0 0 100 60" preserveAspectRatio="none">
+        <linearGradient id="dmFlameG" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stopColor="#d8330a" />
+          <stop offset="0.4" stopColor="#ff6a14" />
+          <stop offset="0.75" stopColor="#ffb13a" />
+          <stop offset="1" stopColor="#ffe58a" />
+        </linearGradient>
+        <path
+          fill="url(#dmFlameG)"
+          d="M6 60 C 0 42 12 40 16 26 C 18 18 22 16 24 22 C 26 28 28 30 30 28 C 34 40 34 50 34 60 Z M34 60 C 32 38 46 34 50 16 C 54 32 60 34 60 44 C 64 36 68 36 70 30 C 74 44 70 52 64 60 Z M62 60 C 62 44 72 42 78 30 C 80 38 84 38 86 36 C 90 48 94 50 94 60 Z"
+        />
+      </svg>
     </div>
   );
 }
