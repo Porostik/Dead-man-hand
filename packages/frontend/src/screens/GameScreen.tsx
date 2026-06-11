@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { DealtCard, Suit } from '@dmh/engine';
+import type { DealtCard } from '@dmh/engine';
 import { useGameStore } from '../store/gameStore';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { haptic } from '../lib/telegram';
@@ -20,7 +20,7 @@ import { BetPanel, CashOutBar } from '../components/game/bet';
 const SHUFFLE_SECS = 5;
 
 /** Indices of the cards that make up the combo the last card just completed. */
-function comboIndices(cards: DealtCard[], roundSuit: Suit): Set<number> {
+function comboIndices(cards: DealtCard[]): Set<number> {
   const out = new Set<number>();
   const i = cards.length - 1;
   const last = cards[i];
@@ -30,7 +30,7 @@ function comboIndices(cards: DealtCard[], roundSuit: Suit): Set<number> {
   } else if (last.combo === 'straight') {
     for (let k = Math.max(0, i - 2); k <= i; k++) out.add(k);
   } else if (last.combo === 'flush') {
-    cards.forEach((c, k) => c.suit === roundSuit && out.add(k));
+    for (let k = i; k >= 0 && cards[k].suit === last.suit; k--) out.add(k);
   } else if (last.combo === 'deadmans') {
     cards.forEach((c, k) => (c.rank === 'A' || c.rank === '8') && out.add(k));
   }
@@ -101,7 +101,7 @@ export function GameScreen() {
   const deckRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!lastCard?.combo) return;
-    const idx = comboIndices(round.sequence.slice(0, dealtCount), round.roundSuit);
+    const idx = comboIndices(round.sequence.slice(0, dealtCount));
     // celebrate once the card has landed (~deal animation), not at t=0
     const t = setTimeout(() => {
       setHighlight(idx);

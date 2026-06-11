@@ -2451,3 +2451,65 @@ body {
 .tg-fullscreen .dm-header {
   padding-top: 2px;
 }
+
+/* ===================================================================
+   Punchier combo feedback — make a combo really land
+   =================================================================== */
+/* contributing cards: bigger snappy pop + brighter glow */
+.dm-card-wrap.is-combo-hit .hn-pcard {
+  border-color: var(--ember2);
+  box-shadow:
+    0 0 0 2px var(--ember2),
+    0 0 36px rgba(255, 196, 130, 0.95),
+    0 10px 24px rgba(0, 0, 0, 0.55);
+  animation: dm-combo-hit 0.56s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+}
+@keyframes dm-combo-hit {
+  0% {
+    transform: translateY(0) scale(1) rotate(0);
+  }
+  34% {
+    transform: translateY(-15px) scale(1.17) rotate(-1.6deg);
+  }
+  62% {
+    transform: translateY(-5px) scale(1.07) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+/* combo badge punches in (scale + overshoot) every time it appears */
+.dm-heatflare {
+  animation: dm-combo-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.6);
+  box-shadow: 0 0 22px rgba(255, 150, 80, 0.4);
+}
+@keyframes dm-combo-pop {
+  0% {
+    transform: scale(0.5) translateY(7px);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.2) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+.dm-heatflare--3 {
+  animation-duration: 0.7s;
+}
+
+/* a touch stronger screen nudge */
+@keyframes dm-nudge {
+  15% {
+    transform: translate(-5px, 2px) rotate(-0.4deg);
+  }
+  45% {
+    transform: translate(5px, -2px) rotate(0.5deg);
+  }
+  75% {
+    transform: translate(-3px, 1px) rotate(-0.2deg);
+  }
+}

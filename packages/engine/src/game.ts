@@ -27,19 +27,19 @@ function pick<T>(arr: T[], rng: Rng): T {
 
 /**
  * Detect the combo (if any) completed by the card at `i`, given the cards dealt so
- * far. One badge per card — checked in descending payout priority. Pure: depends
- * only on the revealed sequence, not on randomness (no card counting: every round
- * is independently drawn).
+ * far. One badge per card, in descending payout priority so the best combo wins
+ * (a straight-flush awards the straight, not the flush). Every combo except the
+ * Dead Man's Hand jackpot is a visible RUN of adjacent cards — so the player can
+ * see why it fired. Pure: depends only on the revealed sequence (no card counting).
  */
 function detectCombo(
   cards: Pick<DealtCard, 'rank' | 'suit'>[],
   i: number,
-  roundSuit: Suit,
   config: GameConfig,
 ): ComboType | null {
   const { setLen, straightLen, flushCount } = config.combo;
 
-  // deadmans — aces & eights; fires on the card that first reaches 2 + 2.
+  // deadmans — aces & eights collected; fires on the card that first reaches 2 + 2.
   const aces = (upTo: number) =>
     cards.slice(0, upTo + 1).filter((c) => c.rank === 'A').length;
   const eights = (upTo: number) =>
@@ -47,14 +47,6 @@ function detectCombo(
   const deadNow = aces(i) >= 2 && eights(i) >= 2;
   const deadBefore = i > 0 && aces(i - 1) >= 2 && eights(i - 1) >= 2;
   if (deadNow && !deadBefore) return 'deadmans';
-
-  // flush — pops once, on the card that reaches flushCount round-suit cards.
-  if (cards[i].suit === roundSuit) {
-    const suitCount = cards
-      .slice(0, i + 1)
-      .filter((c) => c.suit === roundSuit).length;
-    if (suitCount === flushCount) return 'flush';
-  }
 
   // straight — the last `straightLen` ranks are consecutive (distinct).
   if (i + 1 >= straightLen) {
@@ -66,11 +58,18 @@ function detectCombo(
     if (consecutive) return 'straight';
   }
 
-  // set / pair — the trailing run of identical ranks.
-  let run = 1;
-  for (let k = i - 1; k >= 0 && cards[k].rank === cards[i].rank; k--) run++;
-  if (run >= setLen) return 'set';
-  if (run >= 2) return 'pair';
+  // set — `setLen` of the same rank IN A ROW.
+  let rankRun = 1;
+  for (let k = i - 1; k >= 0 && cards[k].rank === cards[i].rank; k--) rankRun++;
+  if (rankRun >= setLen) return 'set';
+
+  // flush — `flushCount` of the same suit IN A ROW (any suit).
+  let suitRun = 1;
+  for (let k = i - 1; k >= 0 && cards[k].suit === cards[i].suit; k--) suitRun++;
+  if (suitRun >= flushCount) return 'flush';
+
+  // pair — two of the same rank in a row.
+  if (rankRun >= 2) return 'pair';
 
   return null;
 }
@@ -145,7 +144,7 @@ function dealCard(
   const suit = pick(SUITS, rng);
   const bonus = suit === roundSuit;
   let next = multiplier + config.rankWeights[rank] + (bonus ? config.suitBonus : 0);
-  const combo = detectCombo([...draws, { rank, suit }], i, roundSuit, config);
+  const combo = detectCombo([...draws, { rank, suit }], i, config);
   if (combo) next *= config.combo.bonus[combo];
   return { rank, suit, bonus, combo, multiplier: Math.min(r2(next), cap) };
 }
