@@ -68,17 +68,28 @@ export interface DrawerProps {
   children?: ReactNode;
   /** Edge the sheet slides from. Default 'bottom'. */
   side?: 'top' | 'bottom';
+  /** Fill the whole screen (for full-page content). */
+  full?: boolean;
 }
 
 /** Sheet / drawer that slides from the bottom (default) or top edge. */
-export function Drawer({ open, onClose, title, children, side = 'bottom' }: DrawerProps) {
+export function Drawer({
+  open,
+  onClose,
+  title,
+  children,
+  side = 'bottom',
+  full = false,
+}: DrawerProps) {
   if (!open) return null;
   const handle = <div className="hn-drawer__handle" />;
   return (
     <>
       <div className="hn-drawer__scrim" onClick={onClose} />
       <div
-        className={`hn-drawer${side === 'top' ? ' hn-drawer--top' : ''}`}
+        className={`hn-drawer${side === 'top' ? ' hn-drawer--top' : ''}${
+          full ? ' hn-drawer--full' : ''
+        }`}
         role="dialog"
         aria-modal="true"
       >

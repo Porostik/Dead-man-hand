@@ -1053,7 +1053,7 @@ body {
   top: 38%;
 }
 .dm-gauge__tick:nth-child(3) {
-  top: 62%;
+  top: 56%;
 }
 .dm-gauge__tick:nth-child(4) {
   top: 100%;
@@ -1903,7 +1903,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  top: 56%;
+  top: 62%;
   transform: translateY(-50%);
   margin: 0;
   z-index: 6;
@@ -2589,7 +2589,7 @@ body {
 
 /* lower the stage so the combo badge clears the top deck */
 .dm-stage--center {
-  padding-top: 78px;
+  padding-top: 34px;
 }
 
 /* combo cards keep "burning" (flickering fiery glow) while highlighted */
@@ -2612,4 +2612,42 @@ body {
       0 0 46px rgba(255, 205, 130, 1),
       0 8px 18px rgba(0, 0, 0, 0.5);
   }
+}
+
+/* combo cards: a real flickering flame licking up from the card top */
+.dm-card-wrap.is-combo-hit {
+  overflow: visible;
+}
+.dm-card-wrap.is-combo-hit::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 105%;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 62% at 50% 100%, rgba(255, 236, 150, 0.95), rgba(255, 160, 55, 0.7) 45%, transparent 72%),
+    radial-gradient(32% 82% at 32% 100%, rgba(255, 120, 40, 0.85), transparent 70%),
+    radial-gradient(32% 82% at 68% 100%, rgba(255, 140, 55, 0.85), transparent 70%);
+  filter: blur(3px);
+  mix-blend-mode: screen;
+  animation: dm-flame 0.26s ease-in-out infinite alternate;
+}
+@keyframes dm-flame {
+  from {
+    transform: translateX(-50%) scaleY(0.9) scaleX(1.05);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateX(-50%) scaleY(1.26) scaleX(0.9);
+    opacity: 1;
+  }
+}
+
+/* onboarding clears the TG island/controls in fullscreen (gate + rules drawer) */
+.tg-fullscreen .dm-onb {
+  padding-top: calc(var(--dm-island) + var(--dm-controls));
 }

@@ -602,6 +602,13 @@
     transform: translateY(-100%);
   }
 }
+.hn-drawer--full {
+  height: 100dvh;
+  max-height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
 .hn-drawer__title {
   font-family: var(--font-display);
   font-size: var(--display-sm);
