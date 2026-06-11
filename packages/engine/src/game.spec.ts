@@ -68,3 +68,30 @@ test('crash distribution gives a flat RTP ≈ (1 − houseEdge) at every target'
     expect(rtp).toBeLessThan(0.97);
   }
 });
+
+test('crash mode: combos decorate the climb but never push RTP over 100%', () => {
+  // full card theatre (suit bonus + combos) on top of an edge-controlled crash
+  const config = { ...DEFAULT_CONFIG, economics: { houseEdge: 0.05, maxWinCap: 25 } };
+  const rng = mulberry32(2026);
+  const N = 80_000;
+  const targets = [1.3, 2, 3];
+  const staked = targets.map(() => 0);
+  const returned = targets.map(() => 0);
+
+  for (let n = 0; n < N; n++) {
+    const round = createRound(config, rng);
+    targets.forEach((t, ti) => {
+      staked[ti] += 1;
+      // player cashes at the first displayed multiplier ≥ target (else busts)
+      const hit = round.sequence.find((c) => c.multiplier >= t);
+      if (hit) returned[ti] += hit.multiplier;
+    });
+  }
+
+  targets.forEach((t, ti) => {
+    const rtp = returned[ti] / staked[ti];
+    console.log(`  crash+combos RTP @${t}x = ${(rtp * 100).toFixed(1)}%`);
+    expect(rtp).toBeGreaterThan(0.85); // sane (~95%)
+    expect(rtp).toBeLessThan(1.0); // crucial: combos do NOT open an exploit
+  });
+});

@@ -111,39 +111,88 @@ function rollDeadIndex(config: GameConfig, rng: Rng): number {
 
 /**
  * Build a whole round from the injected `rng`. Deterministic: same seed + config ⇒
- * identical round. Picks the round suit, rolls where the dead card lands, then
- * resolves every safe card (suit bonus + combos) and its running additive
- * multiplier up front. The frontend reveals `sequence` on a timer and busts at
- * `deadIndex`. Predetermining the round from the seed is the foundation for
+ * identical round. Predetermining the round from the seed is the foundation for
  * provably-fair in Phase 2.
+ *
+ * Two modes:
+ * - **feel** (Phase 0, default): roll where the dead card lands (escalating
+ *   hazard), then deal that many safe cards. The cards drive the multiplier.
+ * - **crash** (`config.economics` set, Phase 1): roll the CRASH multiplier from
+ *   the house-edge distribution first, then deal cards (same suit/combo theatre)
+ *   until the running multiplier reaches it — the crossing card is the dead card.
+ *   The cards are a skin over an edge-controlled crash, so combos decorate the
+ *   climb without changing the RTP.
  */
 export function createRound(config: GameConfig, rng: Rng): Round {
   const roundSuit = pick(SUITS, rng);
-  const deadIndex = rollDeadIndex(config, rng);
+  return config.economics
+    ? buildCrashRound(config, config.economics, roundSuit, rng)
+    : buildFeelRound(config, roundSuit, rng);
+}
 
+/** Resolve one safe card's effect (suit bonus + combo) onto the running X. */
+function dealCard(
+  config: GameConfig,
+  roundSuit: Suit,
+  draws: { rank: Rank; suit: Suit }[],
+  i: number,
+  multiplier: number,
+  cap: number,
+  rng: Rng,
+): DealtCard {
+  const rank = pick(RANKS, rng);
+  const suit = pick(SUITS, rng);
+  const bonus = suit === roundSuit;
+  let next = multiplier + config.rankWeights[rank] + (bonus ? config.suitBonus : 0);
+  const combo = detectCombo([...draws, { rank, suit }], i, roundSuit, config);
+  if (combo) next *= config.combo.bonus[combo];
+  return { rank, suit, bonus, combo, multiplier: Math.min(r2(next), cap) };
+}
+
+/** Phase-0 feel model: deal exactly `deadIndex` safe cards. */
+function buildFeelRound(config: GameConfig, roundSuit: Suit, rng: Rng): Round {
+  const deadIndex = rollDeadIndex(config, rng);
   const draws: { rank: Rank; suit: Suit }[] = [];
   const sequence: DealtCard[] = [];
   let multiplier = config.startMultiplier;
 
   for (let i = 0; i < deadIndex; i++) {
-    const rank = pick(RANKS, rng);
-    const suit = pick(SUITS, rng);
-    draws.push({ rank, suit });
+    const card = dealCard(config, roundSuit, draws, i, multiplier, config.maxMultiplier, rng);
+    draws.push({ rank: card.rank, suit: card.suit });
+    multiplier = card.multiplier;
+    sequence.push(card);
+  }
 
-    const bonus = suit === roundSuit;
-    multiplier += config.rankWeights[rank] + (bonus ? config.suitBonus : 0);
+  return { roundSuit, sequence, deadIndex, startMultiplier: config.startMultiplier };
+}
 
-    const combo = detectCombo(draws, i, roundSuit, config);
-    if (combo) multiplier *= config.combo.bonus[combo];
+/** Phase-1 crash model: deal cards until X reaches the rolled crash multiplier. */
+function buildCrashRound(
+  config: GameConfig,
+  economics: NonNullable<GameConfig['economics']>,
+  roundSuit: Suit,
+  rng: Rng,
+): Round {
+  const crashPoint = rollCrashPoint(economics, rng);
+  const draws: { rank: Rank; suit: Suit }[] = [];
+  const sequence: DealtCard[] = [];
+  let multiplier = config.startMultiplier;
+  // crash mode may need more cards than the feel cap to reach a high crash point
+  const limit = Math.max(config.maxCards, 150);
 
-    multiplier = Math.min(r2(multiplier), config.maxMultiplier);
-    sequence.push({ rank, suit, bonus, combo, multiplier });
+  for (let i = 0; i < limit; i++) {
+    const card = dealCard(config, roundSuit, draws, i, multiplier, economics.maxWinCap, rng);
+    // the first card that would reach the crash multiplier IS the dead card
+    if (card.multiplier >= crashPoint) break;
+    draws.push({ rank: card.rank, suit: card.suit });
+    multiplier = card.multiplier;
+    sequence.push(card);
   }
 
   return {
     roundSuit,
     sequence,
-    deadIndex,
+    deadIndex: sequence.length,
     startMultiplier: config.startMultiplier,
   };
 }
