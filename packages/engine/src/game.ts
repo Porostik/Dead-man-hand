@@ -75,6 +75,28 @@ function detectCombo(
   return null;
 }
 
+/**
+ * Roll a round's CRASH multiplier from the house-edge distribution. With
+ * `M = (1 − e) / (1 − U)` (U ∈ [0,1)), the probability of surviving to ANY
+ * multiplier x is exactly `(1 − e) / x` — so cashing out at any target has the
+ * same expected value `(1 − e)`. That flat curve is what makes the edge
+ * un-exploitable (no "felt-strategy" sweet spot). `M < 1` is an instant bust
+ * (the edge slice); the result is capped at `maxWinCap` to bound payouts (the cap
+ * lowers variance without changing the per-target edge). Pure + seedable.
+ *
+ * Phase-1 primitive. Not yet wired into `createRound` — that needs the card path
+ * re-tuned to rise to the crash. `tools/simulate.mjs` uses this to size
+ * edge / cap / bankroll before any real-money launch.
+ */
+export function rollCrashPoint(
+  economics: { houseEdge: number; maxWinCap: number },
+  rng: Rng,
+): number {
+  const raw = (1 - economics.houseEdge) / (1 - rng());
+  if (raw < 1) return 1; // instant bust — any cash-out target > 1 loses
+  return Math.min(r2(raw), economics.maxWinCap);
+}
+
 /** How many safe cards land before the dead card (escalating hazard). */
 function rollDeadIndex(config: GameConfig, rng: Rng): number {
   const { base, step, max } = config.hazard;

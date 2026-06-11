@@ -77,4 +77,17 @@ export interface GameConfig {
   maxCards: number;
   /** Hard cap on X per round (exposure control; matters in Phase 2). */
   maxMultiplier: number;
+  /**
+   * OPTIONAL Phase-1 economics. When present, a round's CRASH multiplier can be
+   * rolled from a house-edge distribution (see `rollCrashPoint`), giving a flat
+   * RTP ≈ (1 − houseEdge) at every cash-out target, with payouts bounded by
+   * `maxWinCap`. Phase-0 (the shipped F2P) leaves this undefined and uses the
+   * feel model (escalating hazard).
+   */
+  economics?: {
+    /** House edge per bet, e.g. 0.04 → ~96% RTP. */
+    houseEdge: number;
+    /** Max-win cap (multiplier) — bounds the worst single-round payout. */
+    maxWinCap: number;
+  };
 }

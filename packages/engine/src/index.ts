@@ -19,4 +19,4 @@ export type {
 
 export { DEFAULT_CONFIG } from './config';
 export { mulberry32, seedFromString } from './rng';
-export { createRound } from './game';
+export { createRound, rollCrashPoint } from './game';

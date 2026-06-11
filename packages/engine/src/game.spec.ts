@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { createRound } from './game';
+import { createRound, rollCrashPoint } from './game';
 import { mulberry32 } from './rng';
 import { DEFAULT_CONFIG } from './config';
 
@@ -43,4 +43,28 @@ test('combos are detected and announced on the cards that complete them', () => 
     for (const card of round.sequence) if (card.combo) seen.add(card.combo);
   }
   expect(seen.size).toBeGreaterThan(0);
+});
+
+test('rollCrashPoint is deterministic and respects the cap + instant-bust floor', () => {
+  const econ = { houseEdge: 0.05, maxWinCap: 10 };
+  const run = () =>
+    Array.from({ length: 50 }, (_, s) => rollCrashPoint(econ, mulberry32(s)));
+  expect(run()).toEqual(run()); // same seed ⇒ same crash
+  for (const m of run()) {
+    expect(m).toBeGreaterThanOrEqual(1);
+    expect(m).toBeLessThanOrEqual(10);
+  }
+});
+
+test('crash distribution gives a flat RTP ≈ (1 − houseEdge) at every target', () => {
+  const econ = { houseEdge: 0.05, maxWinCap: 1000 }; // high cap → the pure curve
+  const rng = mulberry32(123);
+  const N = 200_000;
+  const crashes = Array.from({ length: N }, () => rollCrashPoint(econ, rng));
+  // cashing out at any target returns ~95% — no exploitable sweet spot
+  for (const target of [1.2, 2, 5]) {
+    const rtp = (crashes.filter((m) => m >= target).length / N) * target;
+    expect(rtp).toBeGreaterThan(0.93);
+    expect(rtp).toBeLessThan(0.97);
+  }
 });
