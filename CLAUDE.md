@@ -46,7 +46,14 @@ The MVP runs the engine **client-side** in the frontend. No backend needed.
 - ✅ **TMA** (`@telegram-apps/sdk` + local mock so `pnpm dev` runs in a browser):
   fullscreen + safe-area; name in the TG controls strip. `frontend/src/lib/telegram.ts`.
 - ✅ **Deployed free on Vercel** — https://dmh-two.vercel.app (`vercel --prod --archive=tgz`).
-- 🚧 **Art assets** — `tools/gen-images.mjs` ready; blocked on an image provider (credits/token).
+- ✅ **Item art** — gold-on-black PNGs (coins/chips/ring/bullets/sheriff-badge) in
+  `frontend/src/assets/items/`, composited on the dark felt/panel via
+  `mix-blend-mode: screen` (`ItemIcon`, no alpha needed). Coins peek from behind the
+  solid bottom panel (`.dm-bottom::before`); badge top-right with a masked glint;
+  `/kit` shows them all. Mascot still deferred (Rive track — see memory).
+- 🚧 **Asset gen** — Pollinations free image API is now paywalled (x402), so the free
+  `tools/gen-images.mjs` path is dead; generate via a web tool (Gemini/Bing) using
+  `docs/design/prompts.md`, or `PROVIDER=fal` (paid, rotate the leaked key first).
 - ⬜ Playtest with friends. Phase 1: wire crash-edge into the game + re-tune card
   weights (verify in the simulator/lab).
 
