@@ -186,6 +186,9 @@ export function GameScreen() {
             <ShuffleTimer secs={SHUFFLE_SECS} roundId={roundId} />
           ) : (
             <>
+              <div className="dm-comboslot">
+                {!busted && <ComboBadge card={lastCard} />}
+              </div>
               <div className="dm-stage__cards">
                 <TableCards
                   cards={cards}
@@ -196,7 +199,6 @@ export function GameScreen() {
               </div>
               {!busted && (
                 <div className="dm-multgroup">
-                  <ComboBadge card={lastCard} />
                   <MultiplierDisplay value={multiplier} phase={phase} busted={false} />
                 </div>
               )}

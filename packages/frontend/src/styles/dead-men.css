@@ -2348,3 +2348,60 @@ body {
   color: #7fc8a0;
   font-size: 13px;
 }
+
+/* ===================================================================
+   UI refinements — combo badge above cards, bigger shuffle, monolithic
+   bottom panel, ½ under the main cash-out button
+   =================================================================== */
+/* combo badge sits in its own slot ABOVE the card row */
+.dm-comboslot {
+  position: relative;
+  z-index: 6;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dm-stage--center .dm-stage__cards {
+  margin-top: 12px;
+}
+
+/* shuffle deck a touch bigger */
+.dm-felt > .dm-deck2.is-shuffle {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* bottom = one solid full-bleed block (not floating cards) */
+.dm-app--live .dm-bottom {
+  background: var(--surf2, #1e150f);
+  border-top: 1px solid var(--line);
+  padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+}
+.dm-betpanel--multi {
+  gap: 8px;
+  padding: 0;
+}
+.dm-slot {
+  background: var(--sunken, #140d08);
+}
+
+/* cash-out: ½ stacked UNDER the main button; cells fill the panel */
+.dm-cashrow {
+  padding: 0;
+  gap: 8px;
+}
+.dm-cashrow .dm-cashcell {
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+.dm-cashout--multi {
+  width: 100%;
+}
+.dm-half {
+  width: 100%;
+  flex: 0 0 auto;
+  padding: 9px 0;
+  border-radius: 12px;
+  font-size: 16px;
+}
