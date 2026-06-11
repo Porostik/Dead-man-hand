@@ -16,6 +16,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@fal-ai/client": "^1.10.1",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nx/jest": "22.7.5",

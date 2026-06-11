@@ -10,3 +10,6 @@ test-output
 docs/design/handoff
 .claude
 *.timestamp*
+
+# never upload secrets
+.env
