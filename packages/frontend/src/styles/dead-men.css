@@ -2441,3 +2441,8 @@ body {
 .dm-cashbar--idle { min-height: 92px; }
 .dm-betpanel--multi { gap: 6px; }
 .dm-slot { padding: 7px 9px; gap: 6px; }
+
+/* shuffle: lift the progress bar/timer up off the bottom a touch */
+.dm-stage--shuffle {
+  padding-bottom: 54px;
+}
