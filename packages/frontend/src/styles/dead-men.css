@@ -2203,21 +2203,20 @@ body {
     env(safe-area-inset-top, 0px),
     54px
   );
-  --dm-controls: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 30px);
+  --dm-controls: max(var(--tg-viewport-content-safe-area-inset-top, 0px), 40px);
 }
 /* push all app content below the island + TG controls */
 .tg-fullscreen .dm-app--live {
   padding-top: calc(var(--dm-island) + var(--dm-controls));
 }
-/* game name: centered single line in the controls row, between the TG buttons */
+/* game name: two lines (DEAD MEN / HAND), centered in the controls row */
 .tg-fullscreen .dm-wordmark {
   position: absolute;
-  top: var(--dm-island);
+  top: calc(var(--dm-island) + 4px);
   left: 0;
   right: 0;
-  height: var(--dm-controls);
-  flex-direction: row;
-  gap: 6px;
+  flex-direction: column; /* DEAD MEN / HAND on two lines */
+  gap: 0;
   justify-content: center;
   align-items: center;
   z-index: 60;
@@ -2226,6 +2225,7 @@ body {
 .tg-fullscreen .dm-wordmark__main {
   font-size: 15px;
   letter-spacing: 0.5px;
+  line-height: 1.02;
 }
 /* main header: balance left, chat right */
 .tg-fullscreen .dm-header {
