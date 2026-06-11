@@ -2819,10 +2819,17 @@ body {
   height: 80%;
   transform: translateX(-50%);
   pointer-events: none;
+  /* glow via a gradient, NOT a CSS filter — filters rasterise low-res in the TG
+     webview and pixelate the animated SVG */
+  background: radial-gradient(
+    60% 66% at 50% 74%,
+    rgba(255, 132, 46, 0.55),
+    rgba(255, 110, 40, 0.18) 48%,
+    transparent 72%
+  );
 }
 .dm-flame svg {
   display: block;
   width: 100%;
   height: 100%;
-  filter: blur(0.4px) drop-shadow(0 0 7px rgba(255, 110, 30, 0.7));
 }
